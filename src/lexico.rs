@@ -83,7 +83,11 @@ pub fn analize_lexica(mut entrada: Vec<u8>) -> String {
             println!(
                 "Erro na linha {}: {:?}",
                 quebras_de_linhas - quebras_de_linhas_restantes + 1,
-                entrada //entrada_string.split_once('\n').unwrap().0
+                String::from_utf8(entrada)
+                    .expect("Cadeia UTF-8 inválida!")
+                    .split_once('\n')
+                    .unwrap()
+                    .0
             );
             println!("Uma cadeia de símbolos que não pode ser reconhecida foi encontrada!");
             break;
