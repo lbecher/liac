@@ -1,0 +1,23 @@
+#DATA:
+    INT32: x, y, resultado;
+#DATA
+
+#MAIN:
+    // resultado = resultado + 2;
+    SET: resultado, ADD(resultado, 2);
+    
+    // resultado = resultado + (x + (resultado * 2));
+    SET: resultado, ADD(resultado, ADD(x, MUL(resultado, 2)));
+    
+    BLOC: OPLOGICA;
+#MAIN;
+
+#OPLOGICA:
+    SET: x, 1;
+    SET: y, 0;
+    
+    // if (x > y && resultado < y);
+    #INZ: AND(A(x, y), B(resultado, y)):
+        PRINT: "ola";
+    #INZ;
+#OPLOGICA;

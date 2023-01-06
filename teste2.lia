@@ -1,0 +1,12 @@
+#DATA:
+    INT32 x, y, resultado;
+#DATA;
+
+#MAIN:
+    BLOC: SOMA;
+#MAIN;
+
+#SOMA:
+    SET: resultado, 0;
+    SET: resultado, ADD(x, y);
+#SOMA;

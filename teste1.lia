@@ -1,0 +1,31 @@
+#DATA:
+    INT8: x, y, zS;
+    INT16: a, v_s, zS;
+    INT32: x_, y6, zS;
+    INT64: xSS, y, zS;
+    UINT8: x, y, zS;
+    UINT16: x, y, zS;
+    UINT32: x, y, zS;
+    UINT64: x, y, zS;
+    CHR: carac, 'r';
+    STR: string, "minha string";
+#DATA;
+
+!--
+Um bloco de comentario
+01
+02
+--!
+
+#MAIN:
+    PRINT: "alguma coisa", x_; // comentario
+    SCAN: "alguma coisa", x;
+    SET: x, AND(x, OR(x, y));
+    BLOC: OPERACAO;
+#MAIN;
+
+#OPERACAO:
+    #WNZ: NOT(B(zS, 100)):
+        SET: zS, MUL(x, y);
+    #WNZ;
+#OPERACAO;
