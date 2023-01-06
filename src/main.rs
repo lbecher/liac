@@ -27,7 +27,8 @@ fn main() {
     entrada_string = entrada_string.replace("\\0", "\0");
 
     // inicia analizador léxico
-    let tokens = analize_lexica(entrada_string.as_bytes().to_vec());
+    let tokens = analize_lexica(entrada_string.as_bytes().to_vec())
+        .unwrap();
 
-    println!("{}", tokens);
+    println!("{}", tokens)
 }

@@ -1,10 +1,10 @@
 use nao_tokenizadores as ntkz;
 use tokenizadores as tkz;
 
-pub fn analize_lexica(mut entrada: Vec<u8>) -> String {
+pub fn analize_lexica(mut entrada: Vec<u8>) -> Result<String, i8> {
     let quebras_de_linhas = entrada
         .iter()
-        .filter(|&n| *n == 13)
+        .filter(|&n| *n == b'\n')
         .count();
    
     let mut tokens: String = String::new();
@@ -77,11 +77,13 @@ pub fn analize_lexica(mut entrada: Vec<u8>) -> String {
             entrada.drain(0..resultado.0);
             tokens = format!("{}\n{}", tokens, resultado.1);
         } else {
-            let quebras_de_linhas_restantes = entrada.iter().filter(|&n| *n == 13).count();
-            //let entrada_string = String::from_utf8(entrada)
-                //.expect("Cadeia UTF-8 inválida!");
+            let quebras_de_linhas_restantes = entrada
+                .iter()
+                .filter(|&n| *n == b'\n')
+                .count();
+
             println!(
-                "Erro na linha {}: {:?}",
+                "Uma cadeia de símbolos que não pode ser reconhecida foi encontrada!\nLinha {}: {}\nSe a cadeia pertence a um comentário, a indicação de linha pode não ser precisa.",
                 quebras_de_linhas - quebras_de_linhas_restantes + 1,
                 String::from_utf8(entrada)
                     .expect("Cadeia UTF-8 inválida!")
@@ -89,12 +91,12 @@ pub fn analize_lexica(mut entrada: Vec<u8>) -> String {
                     .unwrap()
                     .0
             );
-            println!("Uma cadeia de símbolos que não pode ser reconhecida foi encontrada!");
-            break;
+
+            return Err(-1);
         }
     }
 
-    return tokens;
+    return Ok(tokens);
 }
 
 mod nao_tokenizadores {
