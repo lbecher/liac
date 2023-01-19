@@ -124,3 +124,8 @@ H -> Numero
 | ```I36``` | ```G -> Operador AbreParenteses H Virgula .H FechaParenteses ```<br>```H -> .G ```<br>```H -> .IdDeVariavel ```<br>```H -> .Numero ```<br>```G -> .Operador AbreParenteses H FechaParenteses ```<br>```G -> .Operador AbreParenteses H Virgula H FechaParenteses``` | ```δ(I36, H) = I37 ```<br>```δ(I36, G) = I21 ```<br>```δ(I36, IdDeVariavel) = I33 ```<br>```δ(I36, Numero) = I34 ```<br>```δ(I36, Operador) = I27``` |
 | ```I37``` | ```G -> Operador AbreParenteses H Virgula H .FechaParenteses``` | ```δ(I37, FechaParenteses) = I38``` |
 | ```I38``` | ```G -> Operador AbreParenteses H Virgula H FechaParenteses.``` |   |
+
+## Tabela SRL
+
+|  Estado |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+|---|---|---|---|---|---|---|---|---|---|   |---|---|---|---|---|---|---|---|---|---|   |---|---|---|---|---|---|---|---|
