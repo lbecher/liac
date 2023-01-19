@@ -83,7 +83,7 @@ H -> Numero
 
 # Autômato
 
-| ```Estado``` | ```Itens``` | ```Transições``` |
+| Estado | Itens | Transições |
 |---|---|---|
 | ```i0``` | ```S' -> .S```<br>```S -> .A```<br>```S -> .A S```<br>```A -> .AbreBlocoDeCodigo B FechaBlocoDeCodigo``` | ```δ(i0, S) = i1```<br>```δ(i0, A) = i2```<br>```δ(i0, AbreBlocoDeCodigo) = i3``` |
 | ```i1``` | ```S' -> S.``` |   |
