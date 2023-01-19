@@ -50,36 +50,6 @@ H -> IdDeVariavel
 H -> Numero
 ```
 
-## BNF
-
-```
-<S> ::= <A>
-<S> ::= <A> <S>
-<A> ::= AbreBlocoDeCodigo <B> FechaBlocoDeCodigo
-<B> ::= <C>
-<B> ::= <C> <B>
-<C> ::= AbreBlocoCondicional <B> FechaBlocoCondicional
-<C> ::= <D> DoisPontos <E> PontoEVirgula
-<D> ::= Bloc
-<D> ::= Set
-<D> ::= Print
-<D> ::= Scan
-<D> ::= TipoDeVariavel
-<E> ::= <F>
-<E> ::= <F> Virgula <E>
-<F> ::= <G>
-<F> ::= IdDeVariavel
-<F> ::= IdDeBloco
-<F> ::= Caractere
-<F> ::= Numero
-<F> ::= String
-<G> ::= Operador AbreParenteses <H> FechaParenteses
-<G> ::= Operador AbreParenteses <H> Virgula <H> FechaParenteses
-<H> ::= <G>
-<H> ::= IdDeVariavel
-<H> ::= Numero
-```
-
 ## Gramática Aumentada
 
 ```
@@ -109,6 +79,38 @@ G -> Operador AbreParenteses H Virgula H FechaParenteses
 H -> G
 H -> IdDeVariavel
 H -> Numero
+```
+
+
+## BNF
+
+```
+<S'> ::= <S>
+<S> ::= <A>
+<S> ::= <A> <S>
+<A> ::= AbreBlocoDeCodigo <B> FechaBlocoDeCodigo
+<B> ::= <C>
+<B> ::= <C> <B>
+<C> ::= AbreBlocoCondicional <B> FechaBlocoCondicional
+<C> ::= <D> DoisPontos <E> PontoEVirgula
+<D> ::= Bloc
+<D> ::= Set
+<D> ::= Print
+<D> ::= Scan
+<D> ::= TipoDeVariavel
+<E> ::= <F>
+<E> ::= <F> Virgula <E>
+<F> ::= <G>
+<F> ::= IdDeVariavel
+<F> ::= IdDeBloco
+<F> ::= Caractere
+<F> ::= Numero
+<F> ::= String
+<G> ::= Operador AbreParenteses <H> FechaParenteses
+<G> ::= Operador AbreParenteses <H> Virgula <H> FechaParenteses
+<H> ::= <G>
+<H> ::= IdDeVariavel
+<H> ::= Numero
 ```
 
 ## Autômato
