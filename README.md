@@ -122,5 +122,5 @@ H -> Numero
 | ```i34``` | ```H -> Numero.``` |   |
 | ```i35``` | ```G -> Operador AbreParenteses H FechaParenteses.``` |   |
 | ```i36``` | ```G -> Operador AbreParenteses H Virgula .H FechaParenteses ```<br>```H -> .G ```<br>```H -> .IdDeVariavel ```<br>```H -> .Numero ```<br>```G -> .Operador AbreParenteses H FechaParenteses ```<br>```G -> .Operador AbreParenteses H Virgula H FechaParenteses``` | ```δ(i36, H) = i37 ```<br>```δ(i36, G) = i21 ```<br>```δ(i36, IdDeVariavel) = i33 ```<br>```δ(i36, Numero) = i34 ```<br>```δ(i36, Operador) = i27``` |
-| ```i37``` | ```G -> Operador AbreParenteses H Virgula H .FechaParenteses``` | ```δ(i37, FechaParenteses) = i39``` |
-| ```i39``` | ```G -> Operador AbreParenteses H Virgula H FechaParenteses.``` |   |
+| ```i37``` | ```G -> Operador AbreParenteses H Virgula H .FechaParenteses``` | ```δ(i37, FechaParenteses) = i38``` |
+| ```i38``` | ```G -> Operador AbreParenteses H Virgula H FechaParenteses.``` |   |
