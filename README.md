@@ -99,3 +99,28 @@ H -> Numero
 | ```i11``` | ```D -> Print.``` |   |
 | ```i12``` | ```D -> Scan.``` |   |
 | ```i13``` | ```D -> TipoDeVariave.``` |   |
+| ```i14``` | ```A -> AbreBlocoDeCodigo B FechaBlocoDeCodigo.``` |   |
+| ```i15``` | ```B -> C B.``` |   |
+| ```i16``` | ```C -> AbreBlocoCondicional B .FechaBlocoCondicional``` | ```δ(i16, FechaBlocoCondicional) = i18``` |
+| ```i17``` | ```C -> D DoisPontos .E PontoEVirgula<br>E -> .F<br>E -> .F Virgula E<br>F -> .G<br>F -> .IdDeVariavel<br>F -> .IdDeBloco<br>F -> .Caractere<br>F -> .Numero<br>F -> .String<br>G -> .Operador AbreParenteses H FechaParenteses<br>G -> .Operador AbreParenteses H Virgula H FechaParenteses``` | ```δ(i17, E) = i19<br>δ(i17, F) = i20<br>δ(i17, G) = i21<br>δ(i17, IdDeVariavel) = i22<br>δ(i17, IdDeBloco) = i23<br>δ(i17, Caractere) = i24<br>δ(i17, Numero) = i25<br>δ(i17, String) = i26<br>δ(i17, Operador) = i27``` |
+| ```i18``` | ```C -> AbreBlocoCondicional B FechaBlocoCondicional.``` |   |
+| ```i19``` | ```C -> D DoisPontos E .PontoEVirgula``` | ```δ(i19, PontoEVirgula) = i28``` |
+| ```i20``` | ```E -> F.<br>E -> F .Virgula E``` | ```δ(i20, Virgula) = i29``` |
+| ```i21``` | ```F -> G.``` |   |
+| ```i22``` | ```F -> IdDeVariavel.``` |   |
+| ```i23``` | ```F -> IdDeBloco.``` |   |
+| ```i24``` | ```F -> Caractere.``` |   |
+| ```i25``` | ```F -> Numero.``` |   |
+| ```i26``` | ```F -> String.``` |   |
+| ```i27``` | ```G -> Operador .AbreParenteses H FechaParenteses<br>G -> Operador .AbreParenteses H Virgula H FechaParenteses``` | ```δ(i27, AbreParenteses) = i30``` |
+| ```i28``` | ```C -> D DoisPontos E PontoEVirgula.``` |   |
+| ```i29``` | ```E -> F Virgula .E<br>E -> .F<br>E -> .F Virgula E<br>F -> .G<br>F -> .IdDeVariavel<br>F -> .IdDeBloco<br>F -> .Caractere<br>F -> .Numero<br>F -> .String<br>G -> .Operador AbreParenteses H FechaParenteses<br>G -> .Operador AbreParenteses H Virgula H FechaParenteses``` | ```δ(i29, E) = i31<br>δ(i29, F) = i20<br>δ(i29, G) = i21<br>δ(i29, IdDeVariavel) = i22<br>δ(i29, IdDeBloco) = i23<br>δ(i29, Caractere) = i24<br>δ(i29, Numero) = i25<br>δ(i29, String) = i26<br>δ(i29, Operador) = i27``` |
+| ```i30``` | ```G -> Operador AbreParenteses .H FechaParenteses<br>G -> Operador AbreParenteses .H Virgula H FechaParenteses<br>H -> .G<br>H -> .IdDeVariavel<br>H -> .Numero<br>G -> .Operador AbreParenteses H FechaParenteses<br>G -> .Operador AbreParenteses H Virgula H FechaParenteses``` | ```δ(i30, H) = i32<br>δ(i30, G) = i21<br>δ(i30, IdDeVariavel) = i33<br>δ(i30, Numero) = i34<br>δ(i30, Operador) = i27``` |
+| ```i31``` | ```E -> F Virgula E.``` |   |
+| ```i32``` | ```G -> Operador AbreParenteses H .FechaParenteses<br>G -> Operador AbreParenteses H .Virgula H FechaParenteses``` | ```δ(i32, FechaParenteses) = i35<br>δ(i32, Virgula) = i36``` |
+| ```i33``` | ```H -> IdDeVariavel.``` |   |
+| ```i34``` | ```H -> Numero.``` |   |
+| ```i35``` | ```G -> Operador AbreParenteses H FechaParenteses.``` |   |
+| ```i36``` | ```G -> Operador AbreParenteses H Virgula .H FechaParenteses<br>H -> .G<br>H -> .IdDeVariavel<br>H -> .Numero<br>G -> .Operador AbreParenteses H FechaParenteses<br>G -> .Operador AbreParenteses H Virgula H FechaParenteses``` | ```δ(i36, H) = i37<br>δ(i36, G) = i21<br>δ(i36, IdDeVariavel) = i33<br>δ(i36, Numero) = i34<br>δ(i36, Operador) = i27``` |
+| ```i37``` | ```G -> Operador AbreParenteses H Virgula H .FechaParenteses``` | ```δ(i37, FechaParenteses) = i39``` |
+| ```i39``` | ```G -> Operador AbreParenteses H Virgula H FechaParenteses.``` |   |
