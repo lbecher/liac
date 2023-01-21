@@ -53,32 +53,32 @@ H -> Numero
 ## Gramática Aumentada
 
 ```
-S' -> S
-S -> A
-S -> A S
-A -> AbreBlocoDeCodigo B FechaBlocoDeCodigo
-B -> C
-B -> C B
-C -> AbreBlocoCondicional B FechaBlocoCondicional
-C -> D DoisPontos E PontoEVirgula
-D -> Bloc
-D -> Set
-D -> Print
-D -> Scan
-D -> TipoDeVariavel
-E -> F
-E -> F Virgula E
-F -> G
-F -> IdDeVariavel
-F -> IdDeBloco
-F -> Caractere
-F -> Numero
-F -> String
-G -> Operador AbreParenteses H FechaParenteses
-G -> Operador AbreParenteses H Virgula H FechaParenteses
-H -> G
-H -> IdDeVariavel
-H -> Numero
+00) S' -> S
+01) S -> A
+02) S -> A S
+03) A -> AbreBlocoDeCodigo B FechaBlocoDeCodigo
+04) B -> C
+05) B -> C B
+06) C -> AbreBlocoCondicional B FechaBlocoCondicional
+07) C -> D DoisPontos E PontoEVirgula
+08) D -> Bloc
+09) D -> Set
+10) D -> Print
+11) D -> Scan
+12) D -> TipoDeVariavel
+13) E -> F
+14) E -> F Virgula E
+15) F -> G
+16) F -> IdDeVariavel
+17) F -> IdDeBloco
+18) F -> Caractere
+19) F -> Numero
+20) F -> String
+21) G -> Operador AbreParenteses H FechaParenteses
+22) G -> Operador AbreParenteses H Virgula H FechaParenteses
+23) H -> G
+24) H -> IdDeVariavel
+25) H -> Numero
 ```
 
 

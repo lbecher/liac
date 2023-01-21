@@ -11,7 +11,7 @@ fn main() {
     let argumentos: Vec<String> = env::args().collect();
 
     // abre arquivo .lia
-    let mut arquivo = File::open(argumentos.get(1).unwrap())
+    let mut arquivo = File::open(az)
         .expect("Não foi possível abrir o arquivo de entrada!");
 
     let mut entrada: Vec<u8> = Vec::new();
