@@ -60,17 +60,16 @@ H -> Numero
 04) B -> C
 05) B -> C B
 06) C -> AbreBlocoCondicional B FechaBlocoCondicional
-07) C -> D DoisPontos E PontoEVirgula
-08) D -> Bloc
-09) D -> Set
+07) C -> D 
+08) D -> Bloc DoisPontos IdDeBloco PontoEVirgula
+09) D -> Set DoisPontos F PontoEVirgula
 10) D -> Print
-11) D -> Scan
-12) D -> TipoDeVariavel
+11) D -> Scan DoisPontos IdDeVariavel PontoEVirgula
+12) D -> TipoDeVariavel DoisPontos E PontoEVirgula
 13) E -> F
 14) E -> F Virgula E
 15) F -> G
 16) F -> IdDeVariavel
-17) F -> IdDeBloco
 18) F -> Caractere
 19) F -> Numero
 20) F -> String
