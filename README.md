@@ -23,32 +23,7 @@ Na raiz do projeto há quatro arquivos ```.lia```. ```teste1.lia``` e ```teste2.
 ## Gramática
 
 ```
-00) S -> A
-01) S -> A S
-02) A -> AbreBlocoDeCodigo B FechaBlocoDeCodigo
-03) B -> C
-04) B -> C B
-05) C -> AbreBlocoCondicional B FechaBlocoCondicional
-06) C -> D 
-07) D -> Bloc DoisPontos IdDeBloco PontoEVirgula
-08) D -> Set DoisPontos IdDeVariavel Virgula E
-09) D -> Print DoisPontos String Virgula F // poderiamos aproveitar o printf ao produzir as chamadas de sistema
-10) D -> Scan DoisPontos String Virgula I // poderiamos aproveitar o scanf ao produzir as chamadas de sistema
-11) D -> TipoDeVariavel DoisPontos I
-12) E -> IdDeVariavel PontoEVirgula
-13) E -> Caractere PontoEVirgula
-14) E -> Numero PontoEVirgula
-15) E -> String PontoEVirgula
-16) E -> G PontoEVirgula
-17) F -> E
-18) F -> E Virgula F
-19) G -> Operador AbreParenteses H FechaParenteses
-20) G -> Operador AbreParenteses H Virgula H FechaParenteses
-21) H -> G
-22) H -> IdDeVariavel
-23) H -> Numero
-24) I -> IdDeVariavel PontoEVirgula
-25) I -> IdDeVariavel Virgula I
+
 ```
 
 ## Gramática Aumentada
