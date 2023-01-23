@@ -29,35 +29,41 @@ Na raiz do projeto há quatro arquivos ```.lia```. ```teste1.lia``` e ```teste2.
 ## Gramática Aumentada
 
 ```
-00) S' -> S
-01) S -> A
-02) S -> A S
-03) A -> AbreBlocoDeCodigo B FechaBlocoDeCodigo
-04) B -> C
-05) B -> C B
-06) C -> AbreBlocoINZ H DoisPontos B FechaBlocoINZ
-07) C -> AbreBlocoWNZ H DoisPontos B FechaBlocoWNZ
-08) C -> AbreBlocoRUI IdDeVariavel Virgula H Virgula H DoisPontos B FechaBlocoRUI
-09) C -> D 
-10) D -> Bloc DoisPontos IdDeBloco PontoEVirgula
-11) D -> Set DoisPontos IdDeVariavel Virgula E
-12) D -> Print DoisPontos String Virgula F // poderiamos aproveitar o printf ao produzir as chamadas de sistema
-13) D -> Scan DoisPontos String Virgula I // poderiamos aproveitar o scanf ao produzir as chamadas de sistema
-14) D -> TipoDeVariavel DoisPontos I
-15) E -> IdDeVariavel PontoEVirgula
-16) E -> Caractere PontoEVirgula
-17) E -> Numero PontoEVirgula
-18) E -> String PontoEVirgula
-19) E -> G PontoEVirgula
-20) F -> E
-21) F -> E Virgula F
-22) G -> Operador AbreParenteses H FechaParenteses
-23) G -> Operador AbreParenteses H Virgula H FechaParenteses
-24) H -> G
-25) H -> IdDeVariavel
-26) H -> Numero
-27) I -> IdDeVariavel PontoEVirgula
-28) I -> IdDeVariavel Virgula I
+0	S' -> S
+1	S -> A B
+2	S -> A B C
+3	A -> AbreBlocoDATA E FechaBlocoDATA
+4	B -> AbreBlocoMAIN H FechaBlocoMAIN
+5	C -> D
+6	C -> D C
+7	D -> AbreBlocoDeCodigo H FechaBlocoDeCodigo
+8	E -> F
+9	E -> F E
+10	F -> TipoDeVariavel DoisPontos G
+11	G -> IdDeVariavel PontoEVirgula
+12	G -> IdDeVariavel Virgula G
+13	H -> I
+14	H -> I H
+15	I -> AbreBlocoINZ IdDeVariavel DoisPontos H FechaBlocoINZ
+16	I -> AbreBlocoWNZ IdDeVariavel DoisPontos H FechaBlocoWNZ
+17	I -> AbreBlocoRUI IdDeVariavel Virgula M Virgula M DoisPontos H FechaBlocoRUI
+18	I -> Bloc DoisPontos IdDeBloco PontoEVirgula
+19	I -> Set DoisPontos IdDeVariavel Virgula K
+20	I -> Print DoisPontos String Virgula J // poderiamos aproveitar o printf ao produzir as chamadas de sistema
+21	I -> Scan DoisPontos String Virgula G // poderiamos aproveitar o scanf ao produzir as chamadas de sistema
+22	J -> K
+23	J -> K Virgula J
+24	K -> IdDeVariavel PontoEVirgula
+25	K -> Caractere PontoEVirgula
+26	K -> Numero PontoEVirgula
+27	K -> String PontoEVirgula
+28	K -> L PontoEVirgula
+29	L -> Operador AbreParenteses M FechaParenteses
+30	L -> Operador AbreParenteses M Virgula M FechaParenteses
+31	M -> L
+32	M -> IdDeVariavel
+33	M -> Numero
+34	M -> Caractere
 ```
 
 ## BNF
