@@ -63,7 +63,7 @@ H -> Numero
 07) C -> D 
 08) D -> Bloc DoisPontos IdDeBloco PontoEVirgula
 09) D -> Set DoisPontos F PontoEVirgula
-10) D -> Print
+10) D -> Print DoisPontos E PontoEVirgula
 11) D -> Scan DoisPontos IdDeVariavel PontoEVirgula
 12) D -> TipoDeVariavel DoisPontos E PontoEVirgula
 13) E -> F
