@@ -78,9 +78,8 @@ H -> Numero
 23) H -> G
 24) H -> IdDeVariavel
 25) H -> Numero
-I -> J
-I -> J Virgula I
-J -> IdDeVariavel
+I -> IdDeVariavel
+I -> IdDeVariavel Virgula I
 ```
 
 
