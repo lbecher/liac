@@ -23,31 +23,32 @@ Na raiz do projeto há quatro arquivos ```.lia```. ```teste1.lia``` e ```teste2.
 ## Gramática
 
 ```
-S -> A
-S -> A S
-A -> AbreBlocoDeCodigo B FechaBlocoDeCodigo
-B -> C
-B -> C B
-C -> AbreBlocoCondicional B FechaBlocoCondicional
-C -> D DoisPontos E PontoEVirgula
-D -> Bloc
-D -> Set
-D -> Print
-D -> Scan
-D -> TipoDeVariavel
-E -> F
-E -> F Virgula E
-F -> G
-F -> IdDeVariavel
-F -> IdDeBloco
-F -> Caractere
-F -> Numero
-F -> String
-G -> Operador AbreParenteses H FechaParenteses
-G -> Operador AbreParenteses H Virgula H FechaParenteses
-H -> G
-H -> IdDeVariavel
-H -> Numero
+00) S -> A
+01) S -> A S
+02) A -> AbreBlocoDeCodigo B FechaBlocoDeCodigo
+03) B -> C
+04) B -> C B
+05) C -> AbreBlocoCondicional B FechaBlocoCondicional
+06) C -> D 
+07) D -> Bloc DoisPontos IdDeBloco PontoEVirgula
+08) D -> Set DoisPontos IdDeVariavel Virgula E
+09) D -> Print DoisPontos String Virgula F // poderiamos aproveitar o printf ao produzir as chamadas de sistema
+10) D -> Scan DoisPontos String Virgula IdDeVariavel PontoEVirgula // poderiamos aproveitar o scanf ao produzir as chamadas de sistema
+11) D -> TipoDeVariavel DoisPontos I PontoEVirgula
+12) E -> IdDeVariavel PontoEVirgula
+13) E -> Caractere PontoEVirgula
+14) E -> Numero PontoEVirgula
+15) E -> String PontoEVirgula
+16) E -> G PontoEVirgula
+17) F -> E
+18) F -> E Virgula F
+19) G -> Operador AbreParenteses H FechaParenteses
+20) G -> Operador AbreParenteses H Virgula H FechaParenteses
+21) H -> G
+22) H -> IdDeVariavel
+23) H -> Numero
+24) I -> IdDeVariavel
+25) I -> IdDeVariavel Virgula I
 ```
 
 ## Gramática Aumentada
@@ -62,26 +63,25 @@ H -> Numero
 06) C -> AbreBlocoCondicional B FechaBlocoCondicional
 07) C -> D 
 08) D -> Bloc DoisPontos IdDeBloco PontoEVirgula
-09) D -> Set DoisPontos IdDeVariavel Virgula E PontoEVirgula
-10) D -> Print DoisPontos E PontoEVirgula
-11) D -> Scan DoisPontos IdDeVariavel PontoEVirgula
+09) D -> Set DoisPontos IdDeVariavel Virgula E
+10) D -> Print DoisPontos String Virgula F // poderiamos aproveitar o printf ao produzir as chamadas de sistema
+11) D -> Scan DoisPontos String Virgula IdDeVariavel PontoEVirgula // poderiamos aproveitar o scanf ao produzir as chamadas de sistema
 12) D -> TipoDeVariavel DoisPontos I PontoEVirgula
-13) E -> F
-14) E -> F Virgula E
-15) F -> G
-16) F -> IdDeVariavel
-18) F -> Caractere
-19) F -> Numero
-20) F -> String
-21) G -> Operador AbreParenteses H FechaParenteses
-22) G -> Operador AbreParenteses H Virgula H FechaParenteses
-23) H -> G
-24) H -> IdDeVariavel
-25) H -> Numero
-I -> IdDeVariavel
-I -> IdDeVariavel Virgula I
+13) E -> IdDeVariavel PontoEVirgula
+14) E -> Caractere PontoEVirgula
+15) E -> Numero PontoEVirgula
+16) E -> String PontoEVirgula
+17) E -> G PontoEVirgula
+18) F -> E
+19) F -> E Virgula F
+20) G -> Operador AbreParenteses H FechaParenteses
+21) G -> Operador AbreParenteses H Virgula H FechaParenteses
+22) H -> G
+23) H -> IdDeVariavel
+24) H -> Numero
+25) I -> IdDeVariavel
+26) I -> IdDeVariavel Virgula I
 ```
-
 
 ## BNF
 
