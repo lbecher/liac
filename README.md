@@ -60,27 +60,29 @@ Na raiz do projeto há quatro arquivos ```.lia```. ```teste1.lia``` e ```teste2.
 03) A -> AbreBlocoDeCodigo B FechaBlocoDeCodigo
 04) B -> C
 05) B -> C B
-06) C -> AbreBlocoCondicional B FechaBlocoCondicional
-07) C -> D 
-08) D -> Bloc DoisPontos IdDeBloco PontoEVirgula
-09) D -> Set DoisPontos IdDeVariavel Virgula E
-10) D -> Print DoisPontos String Virgula F // poderiamos aproveitar o printf ao produzir as chamadas de sistema
-11) D -> Scan DoisPontos String Virgula I // poderiamos aproveitar o scanf ao produzir as chamadas de sistema
-12) D -> TipoDeVariavel DoisPontos I
-13) E -> IdDeVariavel PontoEVirgula
-14) E -> Caractere PontoEVirgula
-15) E -> Numero PontoEVirgula
-16) E -> String PontoEVirgula
-17) E -> G PontoEVirgula
-18) F -> E
-19) F -> E Virgula F
-20) G -> Operador AbreParenteses H FechaParenteses
-21) G -> Operador AbreParenteses H Virgula H FechaParenteses
-22) H -> G
-23) H -> IdDeVariavel
-24) H -> Numero
-25) I -> IdDeVariavel PontoEVirgula
-26) I -> IdDeVariavel Virgula I
+06) C -> AbreBlocoINZ H DoisPontos B FechaBlocoINZ
+07) C -> AbreBlocoWNZ H DoisPontos B FechaBlocoWNZ
+08) C -> AbreBlocoRUI IdDeVariavel Virgula H Virgula H DoisPontos B FechaBlocoRUI
+09) C -> D 
+10) D -> Bloc DoisPontos IdDeBloco PontoEVirgula
+11) D -> Set DoisPontos IdDeVariavel Virgula E
+12) D -> Print DoisPontos String Virgula F // poderiamos aproveitar o printf ao produzir as chamadas de sistema
+13) D -> Scan DoisPontos String Virgula I // poderiamos aproveitar o scanf ao produzir as chamadas de sistema
+14) D -> TipoDeVariavel DoisPontos I
+15) E -> IdDeVariavel PontoEVirgula
+16) E -> Caractere PontoEVirgula
+17) E -> Numero PontoEVirgula
+18) E -> String PontoEVirgula
+19) E -> G PontoEVirgula
+20) F -> E
+21) F -> E Virgula F
+22) G -> Operador AbreParenteses H FechaParenteses
+23) G -> Operador AbreParenteses H Virgula H FechaParenteses
+24) H -> G
+25) H -> IdDeVariavel
+26) H -> Numero
+27) I -> IdDeVariavel PontoEVirgula
+28) I -> IdDeVariavel Virgula I
 ```
 
 ## BNF
