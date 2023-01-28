@@ -7,20 +7,17 @@
     UINT16: x, y, zS;
     UINT32: x, y, zS;
     UINT64: x, y, zS;
-    CHR: carac, 'r';
-    STR: string, "minha string";
 #DATA;
 
 !--
-Um bloco de comentario
-01
-02
+dfosakp´]ofṕOL[WQ v]~ÇÇÇ
 --!
 
 #MAIN:
-    PRINT: "alguma coisa", x_; // comentario
-    SCAN: "alguma coisa", x;
-    SET: x, AND(x, OR(x, y));
+    SET: minha_var, x;
+    SCAN: "alguma coisa", x, y;
+    PRINT: "s", x;
+    SET: x, 3;
     BLOC: OPERACAO;
 #MAIN;
 
