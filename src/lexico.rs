@@ -142,8 +142,7 @@ pub fn analize_lexica(mut entrada: Vec<u8>) -> Result<Vec<Tokens>, ()> {
                 entrada.drain(0..resultado.0);
                 tokens.push(resultado.1);
             } else {
-                println!("-------------\nERRO SINTÁTICO: Sequência de caracteres inesperada!\nLinha {}.\n-------------\n", quebras_de_linha + 1);
-
+                println!("-------------\nERRO LÉXICO: Sequência de caracteres inesperada!\nLinha {}.\n-------------\n", quebras_de_linha + 1);
                 return Err(());
             }
         }
@@ -810,23 +809,23 @@ mod tkz {
     }
 
     pub fn string(entrada: &[u8]) -> Result<(usize, Tokens), ()> {
-        let simbolos = b" \\1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-
-        let analizador = sym(b'"') + one_of(simbolos.as_ref()).repeat(0..) + sym(b'"');
+        let analizador = sym(b'"') + none_of(b"\"").repeat(0..) + sym(b'"');
 
         match analizador.parse(entrada) {
             Ok(saida) => {
                 let mut resultado: Vec<u8> = Vec::new();
 
-                //resultado.push(saida.0.0);
                 for caractere in saida.0.1 {
                     resultado.push(caractere);
                 }
-                //resultado.push(saida.1);
+
+                let tamanho = resultado.len() + 2;
+                let string = String::from_utf8(resultado).unwrap();
+                let string_decodificada = decodificar_string(&string);
 
                 return Ok((
-                    resultado.len() + 2,
-                    Tokens::String(String::from_utf8(resultado).unwrap()),
+                    tamanho,
+                    Tokens::String(string_decodificada),
                 ));
             }
 
@@ -857,9 +856,7 @@ mod tkz {
             Ok(saida) => {
                 let mut resultado: Vec<u8> = Vec::new();
 
-                //resultado.push(saida.0.0);
                 resultado.push(saida.0.1);
-                //resultado.push(saida.1);
 
                 return Ok((
                     resultado.len() + 2 - (string_tamanho - string_decodificada_tamanho),
