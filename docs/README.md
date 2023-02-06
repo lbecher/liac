@@ -489,7 +489,7 @@ SCAN: x;
 
 | Token                     | Padrão                                                                                                                                                                                                          |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `numero`                  | Qualquer sequência de caracteres numéricos que começa com `+`, `-` ou com um caractere numérico e termina com um caractere numérico.                                                                            |
+| `numero`                  | Qualquer sequência de caracteres numéricos, que pode começar com `+` ou com `-`.                                                                      |
 | `string`                  | Qualquer sequência de caracteres alfanuméricos que começa com `"`, em seguida pode possuir uma combinação de caracteres alfanuméricos e alguns símbolos especiais (espaço, `\n`, `\t` e `\0`) e termina em `"`. |
 | `caractere`               | Qualquer string que começa com `'`, em seguida possui um caractere alfanumérico ou algum símbolo especial (espaço, `\n`, `\t` e `\0`) e termina em `'`.                                                         |
 | `bloc`                    | Qualquer string que contenha os exatos caracteres`BLOC`.                                                                                                                                                        |
@@ -512,256 +512,174 @@ SCAN: x;
 
 ## Expressões Regulares
 
-A seguir temos as definições das regras de produção de cada token.
-
-### Números
-
-> - **`numero` -> ( + | - ) ? [ 0 - 9 ]<sup>+</sup>**
-
-### Strings
-
-> - **`string` -> " ( [ a - z ] | [ A - Z ] | [ 0 - 9 ] | \0 | \n | \t | espaço )\*** **"**
-
-### Caractere
-
-> - **`caractere` -> ' ( [ a - z ] | [ A - Z ] | [ 0 - 9 ] | \0 | \n | \t | espaço ) '**
-
-### Palavras reservadas
-
-> - **`bloc` -> BLOC**
-> - **`set` -> SET**
-> - **`print` -> PRINT**
-> - **`scan` -> SCAN**
-> - **`operadores` -> DIVR | DIV | MUL | ADD | SUB | NOT | ADD | OR | AE | BE | A | B | E**
-
-### Delimitadores
-
-> - **`virgula` -> ,**
-> - **`ponto_e_virgula` -> ;**
-> - **`dois_pontos` -> :**
-> - **`abre_parenteses` -> (**
-> - **`fecha_parenteses` -> )**
-> - **`quebra_linha` -> \n**
-> - **`abre_bloco_de_codigo` -> # [ A - Z ] ( [ A - Z ] | [ 0 - 9 ] | \_ )\*** **:**
-> - **`fecha_bloco_de_codigo` -> # [ A - Z ] ( [ A - Z ] | [ 0 - 9 ] | \_ )\*** **;**
-> - **`abre_bloco_condicional` -> # ( INZ | WNZ | RUI ) :**
-> - **`fecha_bloco_condicional` -> # ( INZ | WNZ | RUI ) ;**
-
-### Variáveis
-
-> - **`tipos_textuais` -> STR | CHR**
-> - **`tipos_numericos` -> INT8 | INT16 | INT32 | INT64 | UINT8 | UINT16 | UINT32 | UINT64**
-> - **`id_de_variavel` -> [ a - z ] ( [ a - z ] | [ A - Z ] | [ 0 - 9 ] | \_ )\***
-
-### Bloco
-
-> - **`id_de_bloco` -> [ A - Z ] ( [ A - Z ] | [ 0 - 9 ] | \_ )\***
+A seguir estão as definições das regras de produção de cada token.
 
 ### Não tokenizadoras
 
-> - **`comentario_de_bloco` -> ! - - ( [ a - z ] | [ A - Z ] | [ 0 - 9 ] | \_ | \n | \t | espaço )\*** **- - !**
-> - **`comentario_de_linha` -> / / ( [ a - z ] | [ A - Z ] | [ 0 - 9 ] | \_ | \t | esoaço )\*** **\n**
-> - **`irrelevantes` -> ( \t | \n | espaço )<sup>+</sup>**
+`comentario_de_bloco` -> `!` `-` `-` !( `-` `-` `!` )<sup>*</sup> `-` `-` `!`
+
+`comentario_de_linha` -> `/` `/` !( `\n` )
+
+`irrelevantes` -> ( `\t` | `\n` )<sup>+</sup>
+
+### Números
+
+`numero` -> ( `+` | `-` )? [ `0` - `9` ]<sup>+</sup>
+
+### Strings
+
+`string` -> `"` ( !( `"` ) )<sup>*</sup> `"`
+
+### Caractere
+
+`caractere` -> `'` !( `'` ) `'`
+
+### Palavras reservadas
+
+`bloc` -> `B` `L` `O` `C`
+
+`set` -> `S` `E` `T`
+
+`print` -> `P` `R` `I` `N` `T`
+
+`scan` -> `S` `C` `A` `N`
+
+`operadores` -> ( `D` `I` `V` `R` ) | ( `D` `I` `V` ) | ( `M` `U` `L` ) | ( `A` `D` `D` ) | ( `S` `U` `B` ) | ( `N` `O` `T` ) | ( `A` `D` `D` ) | ( `O` `R` ) | ( `A` `E` ) | ( `B` `E` ) | ( `A` ) | ( `B` ) | ( `E` )
+
+### Delimitadores
+
+`virgula` -> `,`
+
+`ponto_e_virgula` -> `;`
+
+`dois_pontos` -> `:`
+
+`abre_parenteses` -> `(`
+
+`fecha_parenteses` -> `)`
+
+`quebra_de_linha` -> `\n`
+
+`abre_bloco_inz` -> `#` `I` `N` `Z` `:`
+
+`fecha_bloco_inz` -> `#` `I` `N` `Z` `;`
+
+`abre_bloco_wnz` -> `#` `W` `N` `Z` `:`
+
+`fecha_bloco_wnz` -> `#` `W` `N` `Z` `;`
+
+`abre_bloco_rui` -> `#` `R` `U` `I` `:`
+
+`fecha_bloco_rui` -> `#` `R` `U` `I` `;`
+
+`abre_bloco_data` -> `#` `D` `A` `T` `A` `:`
+
+`fecha_bloco_data` -> `#` `D` `A` `T` `A` `;`
+
+`abre_bloco_main` -> `#` `M` `A` `I` `N` `:`
+
+`fecha_bloco_main` -> `#` `M` `A` `I` `N` `;`
+
+`abre_bloco_de_codigo` -> `#` [ `A` - `Z` ] ( [ `A` - `Z` ] | [ `0` - `9` ] | `_` )<sup>*</sup> `:`
+
+`fecha_bloco_de_codigo` -> `#` [ `A` - `Z` ] ( [ `A` - `Z` ] | [ `0` - `9` ] | `_` )<sup>*</sup> `;`
+
+### Variáveis
+
+`tipo_de_variavel` -> ( `C` `H` `R` ) | ( `S` `T` `R` ) | ( `I` `N` `T` `8` ) | ( `I` `N` `T` `1` `6` ) | ( `I` `N` `T` `3` `2` ) | ( `I` `N` `T` `6` `4` ) | ( `U` `I` `N` `T` `8` ) | ( `U` `I` `N` `T` `1` `6` ) | ( `U` `I` `N` `T` `3` `2` ) | ( `U` `I` `N` `T` `6` `4` )
+
+`id_de_variavel` -> [ `a` - `z` ] ( [ `a` - `z` ] | [ `A` - `Z` ] | [ `0` - `9` ] | `_` )<sup>*</sup>
+
+### Blocos
+
+`id_de_bloco` -> [ `A` - `Z` ] ( [ `A` - `Z` ] | [ `0` - `9` ] | `_` )<sup>*</sup>
 
 ## GLC
 
-[tipos_variaveis] -> ([tipos_numericos] | [tipos_textuais])
-
-[declaracao_variaveis] -> [tipos_variaveis][dois_pontos][id_de_variavel][ponto_e_virgula]
-
-[parametros] -> [id_de_variaveis] | [cadeia_de_caracteres] | [caractere] | [naturais]
-
-[parametros_numericos] -> [id_de_variaveis] | [naturais]
-
-[parametros_logicos] -> [operacoes_relacional] | [id_de_variaveis] | [naturais]
-
-[parametros_aritmeticos] -> [operadores_numericos] | [operacoes_aritmeticas]
-
-[acima] -> [id][abre_parenteses][id_de_variavel][virgula][parametros_numericos][fecha_parenteses]
-
-[acima_ou_igual] -> ([id])[abre_parenteses][id_de_variavel][virgula][parametros_numericos][fecha_parenteses]
-
-[abaixo] -> [id][abre_parenteses][id_de_variavel][virgula][parametros_numericos][fecha_parenteses]
-
-[abaixo_ou_igual] -> ([id])[abre_parenteses][id_de_variavel][virgula][parametros_numericos][fecha_parenteses]
-
-[igual] -> [id][abre_parenteses][id_de_variavel][virgula][parametros][fecha_parenteses]
-
-[diferente] -> [id][abre_parenteses][id_de_variavel][virgula][parametros][fecha_parenteses]
-
-[atribuicao] -> ([id])[dois_pontos][id_de_variavel][virgula]([parametros] | [operacoes_aritmeticas] | [operacoes_logicas] | [operacoes_relacional]);
-
-[operacoes_relacional] -> [acima] | [acima_ou_igual] | [abaixo] | [abaixo_ou_igual] | [igual] | [diferente]
-
-[e_logico] -> ([id])[abre_paresentes][id_de_variavel][virgula][parametros_logicos][fecha_parenteses]
-
-[ou_logico] -> ([id])[abre_paresentes][id_de_variavel][virgula][parametros_logicos][fecha_parenteses]
-
-[negacao_logica] -> ([id])[abre_paresentes][parametros_logicos][fecha_parenteses]
-
-[operacoes_logicas] -> [e_logico] | [ou_logico] | [negacao_logica]
-
-[soma] -> ([id])[abre_parenteses][id_de_variavel][virgula][parametros_aritmeticos][fecha_parenteses]
-
-[subtracao] -> ([id])[abre_parenteses][id_de_variavel][virgula][parametros_aritmeticos][fecha_parenteses]
-
-[multiplicacao] -> ([id])[abre_parenteses][id_de_variavel][virgula][parametros_aritmeticos][fecha_parenteses]
-
-[divisao] -> ([id])[abre_parenteses][id_de_variavel][virgula][parametros_aritmeticos][fecha_parenteses]
-
-[resto] -> ([id])[abre_parenteses][id_de_variavel][virgula][parametros_aritmeticos][fecha_paresenteses]
-
-[operacoes_aritmeticas] -> [soma] | [subtracao] | [multiplicacao] | [divisao] | [resto]
-
-[inicio_bloco_principal] -> [abre_bloco_de_codigo][quebra_linha]
-
-[fim_bloco_principal] -> [fecha_bloco_de_codigo][quebra_linha]
-
-[inicio_bloco_dados] -> [abre_bloco_de_codigo][quebra_linha]
-
-[fim_bloco_dados] -> [fecha_bloco_de_codigo][quebra_linha]
-
-[inicio_enquanto_nao_zero] -> [abre_bloco_de_codigo][quebra_linha][id_de_variavel][dois_pontos][quebra_linha]
-
-[fim_enquanto_nao_zero] -> [fecha_bloco_de_codigo][quebra_linha]
-
-[inicio_repeticao_com_incremento] -> [abre_bloco_de_codigo][id_de_variavel][virgula][natural][virgula][natural][dois_pontos][quebra_linha]
-
-[fim_repeticao_com_incremento] -> [fecha_bloco_de_codigo][quebra_linha]
-
-[inicio_se_nao_zero] -> [abre_bloco_de_codigo] ([id_de_variavel] | [naturais] | [operacoes_logicas] | [operacoes_relacional])
-
-[fim_se_nao_zero] -> [fecha_bloco_de_codigo][quebra_linha]
-
-[comentarios] -> ([comentario_de_linha] | [comentario_de_bloco])
-
-[entrada] -> [scan][dois_pontos][id_de_variavel][ponto_e_virgula]
-
-[saida] -> [print][dois_pontos][id_de_variavel][ponto_e_virgula]
-
-[inicio] -> [bloco_dados]
-
-[bloco_dados] -> [inicio_bloco_dados][variaveis][fim_bloco_dados][proximo_bloco]
-
-[variaveis] -> [declaracao_variaveis] [variaveis]| [tipos_variaveis] [id_de_variavel][virgula][variaveis]| [id_de_variavel], [variaveis] | [id_de_variavel][ponto_e_virgula]
-
-[proximo_bloco] -> [inicio_de_bloco] [comandos] [fim_de_bloco] [proximo_bloco] | [inicio_de_bloco] [comandos] [fim_de_bloco]
-
-[proximo_bloco] -> [inicio_bloco_principal][comandos] [fim_bloco_principal][proximo_bloco] | [inicio_bloco_principal][comandos][fim_bloco_principal]
-
-[proximo_bloco] -> [comentarios][proximo_bloco] | [irrelevantes]
-
-[comandos] -> [inicio_enquanto_nao_zero][comandos][fim_enquanto_nao_zero]
-
-[comandos] -> [inicio_repeticao_com_incremento][comandos][fim_repeticao_com_incremento]
-
-[comandos] -> [inicio_se_nao_zero][comandos][fim_se_nao_zero]
-
-[comandos] -> [atribuicao][comandos]
-
-[comandos] -> [entrada][comandos] | [saida][comandos]
-
-[comandos] -> [comentarios][comandos] | [comentarios_bloco][comandos]
+```
+S -> A B
+S -> A B C
+A -> abre_bloco_data E fecha_bloco_data
+B -> abre_bloco_main H fecha_bloco_main
+C -> D
+C -> D C
+D -> abre_bloco_de_codigo H abre_bloco_de_codigo
+E -> F
+E -> F E
+F -> tipo_de_variavel dois_pontos G
+G -> id_de_variavel ponto_e_virgula
+G -> id_de_variavel virgula G
+H -> I
+H -> I H
+I -> abre_bloco_inz L dois_pontos H fecha_bloco_inz
+I -> abre_bloco_wnz L dois_pontos H fecha_bloco_wnz
+I -> abre_bloco_rui id_de_variavel virgula L virgula L dois_pontos H fecha_bloco_rui
+I -> bloc dois_pontos id_de_bloco ponto_e_virgula
+I -> set dois_pontos id_de_variavel virgula J
+I -> print dois_pontos string ponto_e_virgula
+I -> print dois_pontos string virgula J
+I -> scan dois_pontos string virgula G
+J -> id_de_variavel ponto_e_virgula
+J -> id_de_variavel virgula J
+J -> caractere ponto_e_virgula
+J -> caractere virgula J
+J -> numero ponto_e_virgula
+J -> numero virgula J
+J -> string ponto_e_virgula
+J -> string virgula J
+J -> K ponto_e_virgula
+J -> K virgula J
+K -> operador abre_parenteses L fecha_parenteses
+K -> operador abre_Parenteses L virgula L fecha_parenteses
+L -> K
+L -> id_de_variavel
+L -> numero
+L -> caractere
+```
 
 ## BFN
 
-<tipos_variaveis> ::= (<tipos_numericos> | <tipos_textuais>)
+```
 
-<declaracao_variaveis> ::= <tipos_variaveis><dois_pontos><id_de_variavel><ponto_e_virgula>
-
-<parametros> ::= <id_de_variaveis> | <cadeia_de_caracteres> | <caractere> | <naturais>
-
-<parametros_numericos> ::= <id_de_variaveis> | <naturais>
-
-<parametros_logicos> ::= <operacoes_relacional> | <id_de_variaveis> | <naturais>
-
-<parametros_aritmeticos> ::= <operadores_numericos> | <operacoes_aritmeticas>
-
-<acima> ::= <id><abre_parenteses><id_de_variavel><virgula><parametros_numericos><fecha_parenteses>
-
-<acima_ou_igual> ::= (<id>)<abre_parenteses><id_de_variavel><virgula><parametros_numericos><fecha_parenteses>
-
-<abaixo> ::= <id><abre_parenteses><id_de_variavel><virgula><parametros_numericos><fecha_parenteses>
-
-<abaixo_ou_igual> ::= (<id>)<abre_parenteses><id_de_variavel><virgula><parametros_numericos><fecha_parenteses>
-
-<igual> ::= <id><abre_parenteses><id_de_variavel><virgula><parametros><fecha_parenteses>
-
-<diferente> ::= <id><abre_parenteses><id_de_variavel><virgula><parametros><fecha_parenteses>
-
-<atribuicao> ::= (<id>)<dois_pontos><id_de_variavel><virgula>(<parametros> | <operacoes_aritmeticas> | <operacoes_logicas> | <operacoes_relacional>);
-
-<operacoes_relacional> ::= <acima> | <acima_ou_igual> | <abaixo> | <abaixo_ou_igual> | <igual> | <diferente>
-
-<e_logico> ::= (<id>)<abre_paresentes><id_de_variavel><virgula><parametros_logicos><fecha_parenteses>
-
-<ou_logico> ::= (<id>)<abre_paresentes><id_de_variavel><virgula><parametros_logicos><fecha_parenteses>
-
-<negacao_logica> ::= (<id>)<abre_paresentes><parametros_logicos><fecha_parenteses>
-
-<operacoes_logicas> ::= <e_logico> | <ou_logico> | <negacao_logica>
-
-<soma> ::= (<id>)<abre_parenteses><id_de_variavel><virgula><parametros_aritmeticos><fecha_parenteses>
-
-<subtracao> ::= (<id>)<abre_parenteses><id_de_variavel><virgula><parametros_aritmeticos><fecha_parenteses>
-
-<multiplicacao> ::= (<id>)<abre_parenteses><id_de_variavel><virgula><parametros_aritmeticos><fecha_parenteses>
-
-<divisao> ::= (<id>)<abre_parenteses><id_de_variavel><virgula><parametros_aritmeticos><fecha_parenteses>
-
-<resto> ::= (<id>)<abre_parenteses><id_de_variavel><virgula><parametros_aritmeticos><fecha_paresenteses>
-
-<operacoes_aritmeticas> ::= <soma> | <subtracao> | <multiplicacao> | <divisao> | <resto>
-
-<inicio_bloco_principal> ::= <abre_bloco_de_codigo><quebra_linha>
-
-<fim_bloco_principal> ::= <fecha_bloco_de_codigo><quebra_linha>
-
-<inicio_bloco_dados> ::= <abre_bloco_de_codigo><quebra_linha>
-
-<fim_bloco_dados> ::= <fecha_bloco_de_codigo><quebra_linha>
-
-<inicio_enquanto_nao_zero> ::= <abre_bloco_de_codigo><quebra_linha><id_de_variavel><dois_pontos><quebra_linha>
-
-<fim_enquanto_nao_zero> ::= <fecha_bloco_de_codigo><quebra_linha>
-
-<inicio_repeticao_com_incremento> ::= <abre_bloco_de_codigo><id_de_variavel><virgula><natural><virgula><natural><dois_pontos><quebra_linha>
-
-<fim_repeticao_com_incremento> ::= <fecha_bloco_de_codigo><quebra_linha>
-
-<inicio_se_nao_zero> ::= <abre_bloco_de_codigo> (<id_de_variavel> | <naturais> | <operacoes_logicas> | <operacoes_relacional>)
-
-<fim_se_nao_zero> ::= <fecha_bloco_de_codigo><quebra_linha>
-
-<comentarios> ::= (<comentario_de_linha> | <comentario_de_bloco>)
-
-<entrada> ::= <scan><dois_pontos><id_de_variavel><ponto_e_virgula>
-
-<saida> ::= <print><dois_pontos><id_de_variavel><ponto_e_virgula>
-
-<inicio> ::= <bloco_dados>
-
-<bloco_dados> ::= <inicio_bloco_dados><variaveis><fim_bloco_dados><proximo_bloco>
-
-<variaveis> ::= <declaracao_variaveis> <variaveis>`|` <tipos_variaveis> <id_de_variavel><virgula><variaveis>`|` <id_de_variavel>, <variaveis> `|` <id_de_variavel><ponto_e_virgula>
-
-<proximo_bloco> ::= <inicio_de_bloco> <comandos> <fim_de_bloco> <proximo_bloco> `|` <inicio_de_bloco> <comandos> <fim_de_bloco>
-
-<proximo_bloco> ::= <inicio_bloco_principal><comandos> <fim_bloco_principal><proximo_bloco> `|` <inicio_bloco_principal><comandos><fim_bloco_principal>
-
-<proximo_bloco> ::= <comentarios><proximo_bloco> `|` <irrelevantes>
-
-<comandos> ::= <inicio_enquanto_nao_zero><comandos><fim_enquanto_nao_zero>
-
-<comandos> ::= <inicio_repeticao_com_incremento><comandos><fim_repeticao_com_incremento>
-
-<comandos> ::= <inicio_se_nao_zero><comandos><fim_se_nao_zero>
-
-<comandos> ::= <atribuicao><comandos>
-
-<comandos> ::= <entrada><comandos> `|` <saida><comandos>
-
-<comandos> ::= <comentarios><comandos> `|` <comentarios_bloco><comandos>
+<S> ::= <A> <B>
+<S> ::= <A> <B> <C>
+<A> ::= abre_bloco_data <E> fecha_bloco_data
+<B> ::= abre_bloco_main <H> fecha_bloco_main
+<C> ::= <D>
+<C> ::= <D> <C>
+<D> ::= abre_bloco_de_codigo <H> abre_bloco_de_codigo
+<E> ::= <F>
+<E> ::= <F> <E>
+<F> ::= tipo_de_variavel dois_pontos <G>
+<G> ::= id_de_variavel ponto_e_virgula
+<G> ::= id_de_variavel virgula <G>
+<H> ::= <I>
+<H> ::= <I> <H>
+<I> ::= abre_bloco_inz <L> dois_pontos <H> fecha_bloco_inz
+<I> ::= abre_bloco_wnz <L> dois_pontos <H> fecha_bloco_wnz
+<I> ::= abre_bloco_rui id_de_variavel virgula <L> virgula <L> dois_pontos <H> fecha_bloco_rui
+<I> ::= bloc dois_pontos id_de_bloco ponto_e_virgula
+<I> ::= set dois_pontos id_de_variavel virgula <J>
+<I> ::= print dois_pontos string ponto_e_virgula
+<I> ::= print dois_pontos string virgula <J>
+<I> ::= scan dois_pontos string virgula <G>
+<J> ::= id_de_variavel ponto_e_virgula
+<J> ::= id_de_variavel virgula <J>
+<J> ::= caractere ponto_e_virgula
+<J> ::= caractere virgula <J>
+<J> ::= numero ponto_e_virgula
+<J> ::= numero virgula <J>
+<J> ::= string ponto_e_virgula
+<J> ::= string virgula <J>
+<J> ::= <K> ponto_e_virgula
+<J> ::= <K> virgula <J>
+<K> ::= operador abre_parenteses <L> fecha_parenteses
+<K> ::= operador abre_Parenteses <L> virgula <L> fecha_parenteses
+<L> ::= <K>
+<L> ::= id_de_variavel
+<L> ::= numero
+<L> ::= caractere
+```
 
 ## Autômatos
 
