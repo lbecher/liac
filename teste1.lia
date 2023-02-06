@@ -1,28 +1,7 @@
 #DATA:
-    INT8: x, y, zS;
-    INT16: a, v_s, zS;
-    INT32: x_, y6, zS;
-    INT64: xSS, y, zS;
-    UINT8: x, y, zS;
-    UINT16: x, y, zS;
-    UINT32: x, y, zS;
-    UINT64: x, y, zS;
+    INT32: x, c;
 #DATA;
-
-!--
-dfosakp´]ofṕOL[WQ v]~ÇÇÇ
---!
-
 #MAIN:
-    SET: minha_var, x;
-    SCAN: "alguma coisa", x, y;
-    PRINT: "s", x;
-    SET: x, 3;
-    BLOC: OPERACAO;
+    SCAN: "%d %d", x c;
+    PRINT: "%d %d", x, c;
 #MAIN;
-
-#OPERACAO:
-    #WNZ: NOT(B(zS, 100)):
-        SET: zS, MUL(x, y);
-    #WNZ;
-#OPERACAO;

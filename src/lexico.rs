@@ -809,30 +809,41 @@ mod tkz {
     }
 
     pub fn string(entrada: &[u8]) -> Result<(usize, Tokens), ()> {
-        let analizador = sym(b'"') + none_of(b"\"").repeat(0..) + sym(b'"');
+        let mut resultado: Vec<u8> = Vec::new();
 
-        match analizador.parse(entrada) {
-            Ok(saida) => {
-                let mut resultado: Vec<u8> = Vec::new();
+        if entrada[0] == b'"' {
+            resultado.push(entrada[0].clone());
+        } else {
+            return Err(());
+        }
 
-                for caractere in saida.0.1 {
-                    resultado.push(caractere);
-                }
-
-                let tamanho = resultado.len() + 2;
-                let string = String::from_utf8(resultado).unwrap();
-                let string_decodificada = decodificar_string(&string);
-
-                return Ok((
-                    tamanho,
-                    Tokens::String(string_decodificada),
-                ));
+        let mut j: usize = 1;
+        while j < entrada.len() {
+            if entrada[j] == b'"' {
+                break;
+            } else if entrada.len() > j + 1 && entrada[j] == b'\\' && entrada[j + 1] == b'\"' {
+                resultado.push(entrada[j].clone());
+                resultado.push(entrada[j + 1].clone());
+            } else {
+                resultado.push(entrada[j].clone());
             }
+            j = resultado.len();
+        }
 
-            Err(_e) => {
-                return Err(());
-            }
-        };
+        if entrada[j] != b'"' {
+            return Err(());
+        }
+
+        resultado.remove(0); // remove " inicial
+
+        let tamanho = resultado.len() + 2;
+        let string = String::from_utf8(resultado).unwrap();
+        let string_decodificada = decodificar_string(&string);
+
+        return Ok((
+            tamanho,
+            Tokens::String(string_decodificada),
+        ));
     }
 
     pub fn caractere(entrada: &[u8]) -> Result<(usize, Tokens), ()> {
