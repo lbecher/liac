@@ -27,7 +27,7 @@ Se houver a necessidade de reaproveitamento de código, basta criar um ou mais b
 
 ```
 #DATA:
-    INT32 x, y, resultado;
+    INT32: x, y, resultado;
 #DATA;
 
 #MAIN:
@@ -58,7 +58,7 @@ Por isso, é recomendado criar variáveis no bloco de dados que serão operadas 
     --!
 
     SET: soma_var1, var1;
-    SET: soma_var2, var2
+    SET: soma_var2, var2;
     BLOC: SOMA;
     SET: resultado, soma_resultado;
 
@@ -93,7 +93,7 @@ Abaixo há um exemplo de operações lógicas e aritméticas encadeadas em uma l
     SET: resultado, ADD(resultado, ADD(x, MUL(resultado, 2)));
 #MAIN;
 
-#OPLOGICA:
+#OP_LOGICA:
     SET: x, 1;
     SET: y, 0;
 
@@ -106,7 +106,7 @@ Abaixo há um exemplo de operações lógicas e aritméticas encadeadas em uma l
 
     // x > y && (resultado < y || resultado < x);
     AND(A(x, y), OR(B(resultado, y), B(resultado, x)));
-#OPLOGICA;
+#OP_LOGICA;
 ```
 
 ### Demais características
@@ -207,6 +207,16 @@ Os tipos de dados suportados pela linguagem são:
 
 Para simplificar, a LIA interpreta valores lógicos a partir de variśveis e valores inteiros (independentemente de serem sinalizados ou não sinalizados), onde o valor zero é interpretado como falso e qualquer valor diferente de zero é interpretado como verdadeiro.
 
+## SET (atribuição)
+
+O operador `SET` é um operador de atribuição, portanto, seu papel é atribuir algum valor à alguma variável. Seu primeiro argumento é a variável onde a atribuição será realizada. O segundo pode ser um valor imediato a ser atribuído ou uma variável do mesmo tipo do primeiro argumento, que terá seu conteúdo copiado.
+
+```
+SET: var_de_destino, 128;
+SET: var_de_destino, var_de_origem;
+```
+
+
 ## Operadores Relacionais
 
 São funções relacionais que recebem dois valores como parâmetros. O primeiro obrigatoriamente é uma variável e o segundo pode ser tanto uma variável quanto um valor imediato. No cenário de ambos os valores serem variáveis, as variáveis devem ser do mesmo tipo.
@@ -218,6 +228,7 @@ Quando a comparação relacional é verdadeira, retorna-se verdadeiro, ou falso 
 Caso os parâmetros recebidos sejam cadeias de caracteres ou caracteres, a comparação será executada bitwise.
 
 ```
+// valor1 é diferente de valor2?
 D(valor1, valor2)
 ```
 
@@ -226,40 +237,36 @@ D(valor1, valor2)
 Caso os parâmetros recebidos sejam cadeias de caracteres ou caracteres, a comparação será executada bitwise.
 
 ```
+// valor1 é igual a valor2?
 E(valor1, valor2)
 ```
 
 ### A (maior)
 
 ```
+// valor1 é maior que valor2?
 A(valor1, valor2)
 ```
 
 ### AE (maior ou igual)
 
 ```
+// valor1 é maior ou igual a valor2?
 AE(valor1, valor2)
 ```
 
 ### B (menor)
 
 ```
+// valor1 é menor que valor2?
 B(valor1, valor2)
 ```
 
 ### BE (menor ou igual)
 
 ```
+// valor1 é menor ou igual a valor2?
 BE(valor1, valor2)
-```
-
-### SET (atribuição)
-
-O operador `SET` é um operador de atribuição, portanto, seu papel é atribuir algum valor à alguma variável. Seu primeiro argumento é a variável onde a atribuição será realizada. O segundo pode ser um valor imediato a ser atribuído ou uma variável do mesmo tipo do primeiro argumento, que terá seu conteúdo copiado.
-
-```
-SET: var_de_destino, 128;
-SET: var_de_destino, var_de_origem;
 ```
 
 ## Operações Aritméticas
@@ -271,13 +278,15 @@ No caso de ambos serem variáveis, devem ser do mesmo tipo.
 ### ADD (soma)
 
 ```
-ADD(parcela1, parcela2)
+// some valor2 a valor1
+ADD(valor1, valor2)
 ```
 
 ### SUB (subtração)
 
 ```
-SUB(minuendo, subtraendo)
+// subtraia valor2 de valor1
+SUB(valor1, valor2)
 ```
 
 ### MUL (multiplicação)
@@ -395,7 +404,7 @@ SET: caractere, 't';
 
 ### Delimitadores de cadeias de caracteres
 
-Cadeias de caracteres (strings) são tratadas entre `"`. Quando esses delimitadores são utilizados, o caractere de fim de linha (\0) é adicionado ao fim da cadeia de caracteres automaticamente. Por isso, é importante declarar strings de tamanho `n + 1`.
+Cadeias de caracteres (strings) são tratadas entre `"`.
 
 ```
 SET: minha_string, "algum texto";
@@ -403,7 +412,7 @@ SET: minha_string, "algum texto";
 
 ## Condicionais
 
-Estruturas condicionais são utilizadas para executarmos trechos de código, somente se a condição controladora for satisfeita. Caso ela não seja cumprida, a execução continua normalmente após o encerramento do bloco condicional. As estruturas condicionais que a LIA suporta são:
+Estruturas condicionais são utilizadas para executarmos trechos de código somente se a condição controladora for satisfeita. Caso ela não seja cumprida, a execução continua normalmente após o encerramento do bloco condicional. A estrutura condicional que a LIA suporta é somente uma:
 
 ### INZ (se não zero)
 
@@ -417,7 +426,7 @@ Essa condicional pode receber como parâmetro uma variável, valor imediato ou u
 
 ## Estruturas de Repetições
 
-Estruturas de repetições delimitam trechos de códigos que serão repetidos enquanto a condição controladora for cumprida, uma vez que esta condição deixe de ser cumprida, o código continua a execução partindo da linha abaixo do encerramento do bloco de repetição.
+As estruturas de repetições delimitam trechos de códigos que serão repetidos levando em conta a condições de controle de cada estrutura. Após a variável de controle atingir a condição desejada, o código continua a execução partindo da linha logo abaixo ao encerramento do bloco da estrutura de repetição.
 
 ### WNZ (enquanto não zero)
 
@@ -445,7 +454,9 @@ A operação WNZ recebe uma variável como parâmetro. E possui como objetivo re
 
 ### RUI (repetir até, com incremento)
 
-A operação RUI recebe três parâmetros e possui o objetivo de repetir um trecho de código que se encontra dentro de seu bloco. O primeiro parâmetro obrigatoriamente deve ser uma variável. Este parâmetro é utilizado no controle do laço. O segundo parâmetro pode ser uma variável ou imediato, contanto que seja numérico. Este parâmetro é o valor de parada do laço. Por fim, o terceiro parâmetro, assim como o segundo, pode ser um imediato ou variável numérica, e é utilizado como valor de incremento.
+A operação RUI recebe três parâmetros e possui o objetivo de repetir um trecho de código que se encontra dentro de seu bloco. O primeiro parâmetro obrigatoriamente deve ser uma variável. Este parâmetro é utilizado no controle do laço. O segundo parâmetro pode ser uma variável, operação ou imediato. Este parâmetro é o valor de parada do laço. Por fim, o terceiro parâmetro, assim como o segundo, pode ser uma variável, operação ou imediato e é utilizado como valor de incremento.
+
+Os parâmetros devem possuir o mesmo tipo de dado e não podem ser do tipo string.
 
 ```
 #DATA:
@@ -464,63 +475,64 @@ A operação RUI recebe três parâmetros e possui o objetivo de repetir um trec
 
 ## Entrada e Saída
 
-Em toda linguagem, é extremamente importante que o usuário possa interagir com o programa, para tal. Faz-se necessário estabelecer as operações básicas de entrada e saída de dados. Na linguagem LIA, temos apenas duas operações básicas de entrada/saída. Sendo elas:
+Em toda linguagem de programação é importante a definição de comandos básicas de entrada e saída de dados. Na linguagem LIA, há dois comandos básicos para satisfazer essa necessidade. Sendo eles:
 
-- PRINT - Utilizado para exibir uma variável ou valor imediato na tela.
-- SCAN - Utilizado para obter entradas do teclado e armazenar em uma variável.
+- PRINT: Utilizado para imprimir valores no terminal.
+
+- SCAN: Utilizado para ler valores do terminal.
 
 ### PRINT (saída)
 
-A operação **PRINT** tem como objetivo, exibir em tela para o usuário o valor de uma variável ou imediato. Para isto ela pode receber qualquer número de parâmetros (variáveis ou imediatos).
+O comando PRINT tem como objetivo imprimir informações no terminal, utilizando a função `printf` da biblioteca `glibc` para tal propósito. Por isso, ele recebe como parâmetros uma string e, ocasionalmente, as variáveis, as operações e/ou os valores imediatos que serão imprimidos.
 
 ```
-PRINT: "Ola me chamo ", nome, " tenho atualmente ", idade, " anos";
+PRINT: "Olá! Me chamo %s e tenho por volta de %d anos.", nome, SUB(ano_atual, ano_de_nascimento);
 ```
 
 ### SCAN (entrada)
 
-A operação **SCAN** tem como objetivo, obter do teclado do usuário valores que são digitados pelo mesmo. Para isto ela recebe apenas UM parâmetro por vez. Sendo este apenas uma variável.
+O comando SCAN tem como objetivo ler dados inseridos via terminal pelo usuário, utilizando a função `scanf` da biblioteca `glibc` para tal propósito. Por isso, ele recebe como parâmetros uma string de máscara e uma ou mais variáveis que serão ser gravadas, tal como na função `scanf`.
 
 ```
-SCAN: x;
+SCAN: "%d - %f", inteiro, ponto_flutuante;
 ```
 
 ## Tabela de Tokens
 
-| Token                     | Padrão                                                                                                                                                                                                          |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `numero`                  | Qualquer sequência de caracteres numéricos, que pode começar com `+` ou com `-`.                                                                      |
-| `string`                  | Qualquer sequência de caracteres alfanuméricos que começa com `"`, em seguida pode possuir uma combinação de caracteres alfanuméricos e alguns símbolos especiais (espaço, `\n`, `\t` e `\0`) e termina em `"`. |
-| `caractere`               | Qualquer string que começa com `'`, em seguida possui um caractere alfanumérico ou algum símbolo especial (espaço, `\n`, `\t` e `\0`) e termina em `'`.                                                         |
-| `bloc`                    | Qualquer string que contenha os exatos caracteres`BLOC`.                                                                                                                                                        |
-| `set`                     | Qualquer string que contenha os exatos caracteres`SET`.                                                                                                                                                         |
-| `print`                   | Qualquer string que contenha os exatos caracteres`PRINT`.                                                                                                                                                       |
-| `scan`                    | Qualquer string que contenha os exatos caracteres `SCAN`.                                                                                                                                                       |
-| `operador`                | Qualquer string formada pelo nome de um operador lógico, relacional ou aritmético.                                                                                                                              |
-| `virgula`                 | Qualquer caractere `,`.                                                                                                                                                                                         |
-| `ponto_e_virgula`         | Qualquer caractere `;`.                                                                                                                                                                                         |
-| `dois_pontos`             | Qualquer caractere `:`.                                                                                                                                                                                         |
-| `abre_parenteses`         | Qualquer caractere `(`.                                                                                                                                                                                         |
-| `fecha_parenteses`        | Qualquer caractere `)`.                                                                                                                                                                                         |
-| `abre_bloco_condicional`  | Qualquer string que começa com `#`, seguido por `INZ`, `WNZ` ou `RUI` e termina em `:`.                                                                                                                         |
-| `fecha_bloco_condicional` | Qualquer string que começa com `#`, seguido por `INZ`, `WNZ` ou `RUI` e termina em `;`.                                                                                                                         |
-| `abre_bloco_de_codigo`    | Qualquer string que começa com `#`, em seguida possui uma letra maiúscula e, depois, pode possuir uma combinação de caracteres alfanuméricos maiúsculos ou `_` e termina em `:`.                                |
-| `fecha_bloco_de_codigo`   | Qualquer string que começa com `#`, em seguida possui uma letra maiúscula e, depois, pode possuir uma combinação de caracteres alfanuméricos maiúsculos ou `_` e termina em `;`.                                |
-| `tipo_de_variavel`        | Qualquer string formada pelo nome de um tipo de dado.                                                                                                                                                           |
-| `id_de_variavel`          | Qualquer string que começa com letra minúscula, em seguida pode possuir uma combinação de caracteres alfanuméricos ou `_`.                                                                                      |
-| `id_de_bloco`             | Qualquer string que começa com letra maiúscula, em seguida pode possuir uma combinação de caracteres alfanuméricos ou `_`.                                                                                      |
+| Token | Padrão |
+|---|---|
+| `numero` | Qualquer cadeia de caracteres numéricos, podendo começar com `+` ou com `-`. |
+| `string` | Qualquer cadeia de caracteres que começa com `"`, seguido ou não por uma sequência de caracteres diferentes de `"` e termina em `"`. |
+| `caractere` | Qualquer cadeia de caracteres que começa com `'`, seguida por um caractere e termina em `'`. |
+| `bloc` | Qualquer cadeia de caracteres formada pela sequência `B` `L` `O` `C`. |
+| `set` | Qualquer cadeia de caracteres formada pela sequência `S` `E` `T` .|
+| `print` | Qualquer cadeia de caracteres formada pela sequência `P` `R` `I` `N` `T`. |
+| `scan` | Qualquer cadeia de caracteres formada pela sequência `S` `C` `A` `N`. |
+| `operador` | Qualquer cadeia de caracteres formada pelo nome de um operador lógico, relacional ou aritmético. |
+| `virgula` | Qualquer caractere `,`. |
+| `ponto_e_virgula` | Qualquer caractere `;`. |
+| `dois_pontos` | Qualquer caractere `:`. |
+| `abre_parenteses` | Qualquer caractere `(`. |
+| `fecha_parenteses` | Qualquer caractere `)`. |
+| `abre_bloco_inz` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `I` `N` `Z` e termina em `:`. |
+| `fecha_bloco_inz` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `I` `N` `Z` e termina em `;`. |
+| `abre_bloco_wnz` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `W` `N` `Z` e termina em `:`. |
+| `fecha_bloco_wnz` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `W` `N` `Z` e termina em `;`. |
+| `abre_bloco_rui` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `R` `U` `I` e termina em `:`. |
+| `fecha_bloco_rui` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `R` `U` `I` e termina em `;`. |
+| `abre_bloco_data` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `D` `A` `T` `A` e termina em `:`. |
+| `fecha_bloco_data` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `D` `A` `T` `A` e termina em `;`. |
+| `abre_bloco_main` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `M` `A` `I` `N` e termina em `:`. |
+| `fecha_bloco_main` | Qualquer cadeia de caracteres que começa com `#`, seguida pela sequência de caracteres `M` `A` `I` `N` e termina em `;`. |
+| `abre_bloco_de_codigo` | Qualquer cadeia de caracteres que começa com `#`, seguida por uma letra maiúscula e, ocasionalmente, por uma combinação de letras maiúsculas, números ou `_`, terminando em `:`. |
+| `fecha_bloco_de_codigo` | Qualquer cadeia de caracteres que começa com `#`, seguida por uma letra maiúscula e, ocasionalmente, por uma combinação de letras maiúsculas, números ou `_`, terminando em `;`. |
+| `tipo_de_variavel` | Qualquer cadeia de caracteres formada pelo nome de um tipo de dado. |
+| `id_de_variavel` | Qualquer cadeia de caracteres que começa com letra minúscula, seguida ou não por uma combinação de números, letras minúsculas, letras maiúsculas ou `_`. |
+| `id_de_bloco` | Qualquer cadeia de caracteres que começa com uma letra maiúscula, seguida ou não por uma combinação de letras maiúsculas, números ou `_`. |
 
-## Expressões Regulares
+## Expressões regulares
 
 A seguir estão as definições das regras de produção de cada token.
-
-### Não tokenizadoras
-
-`comentario_de_bloco` -> `!` `-` `-` !( `-` `-` `!` )<sup>*</sup> `-` `-` `!`
-
-`comentario_de_linha` -> `/` `/` !( `\n` )
-
-`irrelevantes` -> ( `\t` | `\n` )<sup>+</sup>
 
 ### Números
 
@@ -593,6 +605,14 @@ A seguir estão as definições das regras de produção de cada token.
 ### Blocos
 
 `id_de_bloco` -> [ `A` - `Z` ] ( [ `A` - `Z` ] | [ `0` - `9` ] | `_` )<sup>*</sup>
+
+## Expressões regulares para itens que não geram tokens
+
+`comentario_de_bloco` -> `!` `-` `-` !( `-` `-` `!` )<sup>*</sup> `-` `-` `!`
+
+`comentario_de_linha` -> `/` `/` !( `\n` )
+
+`irrelevantes` -> ( `\t` | `\n` )<sup>+</sup>
 
 ## GLC
 
