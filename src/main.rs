@@ -3,12 +3,13 @@ use std::fs::File;
 use std::io::prelude::*;
 
 mod comum;
-use crate::comum::Tokens;
-
 mod lexico;
-use lexico::analize_lexica;
-
 mod sintatico;
+mod semantico;
+mod llvm;
+
+use crate::comum::Tokens;
+use lexico::analize_lexica;
 use sintatico::Sintatico;
 
 fn main() {

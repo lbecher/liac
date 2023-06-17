@@ -1,7 +1,8 @@
 #DATA:
-    INT32: x, c;
+    INT32: x, y;
+    UINT16: a, b, c;
+    STR: str;
 #DATA;
 #MAIN:
-    SCAN: "%d %d", x c;
-    PRINT: "%d %d", x, c;
+    PRINT: "%d", x;
 #MAIN;

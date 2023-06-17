@@ -1,42 +1,9 @@
 use debug_print::debug_println;
 
-#[path ="comum.rs"]
-mod comum;
-use crate::comum::Tokens;
-
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-enum NaoTerminais {
-    SL,
-    S,
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H,
-    I,
-    J,
-    K,
-    L,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
-enum Acoes {
-    Empilha(usize),
-    Reduz(usize),
-    VaiPara(usize),
-    Aceita,
-    Erro,
-}
-
-#[derive(Debug, Clone, PartialEq, PartialOrd)]
-enum ElementosDaPilha {
-    Tokens(Tokens),
-    NaoTerminais(NaoTerminais),
-    Estados(usize),
-}
+use crate::{
+    comum::*,
+    semantico::*,
+};
 
 #[derive(Debug, Clone)]
 pub struct Sintatico {
@@ -47,6 +14,7 @@ pub struct Sintatico {
     vai_para: bool,
     modo_panico: bool,
     quebras_de_linha: usize,
+    semantico: Semantico,
 }
 
 impl Sintatico {
@@ -64,6 +32,7 @@ impl Sintatico {
             vai_para: false,
             modo_panico: false,
             quebras_de_linha: 0,
+            semantico: Semantico::inicializar(),
         }
     }
 
@@ -134,6 +103,7 @@ impl Sintatico {
                     if self.modo_panico == true {
                         println!("-------------\nERRO SINTÁTICO: Token(s) inesperado(s) encontrado(s)!\n---------------------------------------\n");
                     } else {
+                        self.semantico.gravar_llvm_ir();
                         println!("-------------\nAnálise sintática terminou sem erros.\n---------------------------------------\n");
                     }
                     break;
@@ -148,13 +118,17 @@ impl Sintatico {
                 }
                 else if let Acoes::Reduz(producao) = acao
                 {
+                    let mut desempilhados: Vec<ElementosDaPilha> = Vec::new();
+
                     // preserva não terminal
                     self.simbolo_anterior = self.simbolo_atual.clone();
 
                     // elimina elementos da pilha de acordo com o número de elementos da produção * 2
                     for _i in 0..(producoes[producao].1 + producoes[producao].1) {
-                        self.pilha.pop();
+                        desempilhados.push(self.pilha.pop().unwrap());
                     }
+
+                    self.semantico.tratar_desempilhamento(desempilhados, producao).unwrap();
 
                     // coloca o não terminal obtido da produção no símbolo atual
                     self.consome_quebra_de_linha();
