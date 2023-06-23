@@ -1,8 +1,8 @@
 #DATA:
-    INT32: x, y;
-    UINT16: a, b, c;
-    STR: str;
+    INT32: x, y, z;
 #DATA;
 #MAIN:
-    PRINT: "%d", x;
+    SET: x, 1;
+    SET: y, x;
+    SET: z, ADD(x, SUB(y, x));
 #MAIN;

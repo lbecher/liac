@@ -128,17 +128,22 @@ impl Sintatico {
                         desempilhados.push(self.pilha.pop().unwrap());
                     }
 
-                    self.semantico.tratar_desempilhamento(desempilhados, producao).unwrap();
+                    match self.semantico.tratar_desempilhamento(desempilhados, producao) {
+                        Ok(_) => {}
+                        Err(erro) => {
+                            println!("-------------\n{}\n-------------\n", erro);
+                        }
+                    }
 
                     // coloca o não terminal obtido da produção no símbolo atual
                     self.consome_quebra_de_linha();
                     if self.entrada.len() == 0 {
                         break;
                     }
-                    self.simbolo_atual = ElementosDaPilha::NaoTerminais(producoes[producao].0);
+                    self.simbolo_atual = ElementosDaPilha::NaoTerminais(producoes[producao].0.clone());
 
                     // empilha o não terminal
-                    self.pilha.push(ElementosDaPilha::NaoTerminais(producoes[producao].0));
+                    self.pilha.push(ElementosDaPilha::NaoTerminais(producoes[producao].0.clone()));
                     
                     // ativa o modo vai para
                     self.vai_para = true;
@@ -239,7 +244,7 @@ impl Sintatico {
 
         if let ElementosDaPilha::Tokens(s) = self.simbolo_atual.to_owned() {
             simbolo = ElementosDaPilha::Tokens(s);
-        } else if let ElementosDaPilha::NaoTerminais(s) = self.simbolo_atual {
+        } else if let ElementosDaPilha::NaoTerminais(s) = self.simbolo_atual.clone() {
             simbolo = ElementosDaPilha::NaoTerminais(s);
         } else {
             println!("ERRO: O elemento na pilha não é um símbolo de produção!");
