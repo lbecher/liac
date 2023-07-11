@@ -2,7 +2,7 @@
     INT32: x, y, z;
 #DATA;
 #MAIN:
-    SET: x, 1;
-    SET: y, x;
-    SET: z, ADD(x, SUB(y, x));
+    PRINT: "Digite tres nemeros: ";
+    SCAN: "%d %d %d", x, y, z;
+    PRINT: "Os numeros que voce digitou: %d %d %d\n", x, y, z;
 #MAIN;

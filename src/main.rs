@@ -2,13 +2,12 @@ use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 
-mod comum;
 mod lexico;
 mod sintatico;
 mod semantico;
 mod llvm;
 
-use crate::comum::Tokens;
+use liac::Tokens;
 use lexico::analize_lexica;
 use sintatico::Sintatico;
 
@@ -25,11 +24,8 @@ fn main() {
     arquivo.read_to_end(&mut entrada)
         .expect("Não foi possível ler o arquivo de entrada!");
 
-    let entrada_string: String = String::from_utf8(entrada)
-        .expect("Não foi possível gerar uma string a partir do arquivo!");
-
     // inicia analizador léxico
-    if let Ok(tokens) = analize_lexica(entrada_string.as_bytes().to_vec()) {
+    if let Ok(tokens) = analize_lexica(entrada) {
         // prepara cópia do vetor para o analizador sintático
         let mut tokens_copia = tokens.to_vec();
         tokens_copia.push(Tokens::Fim);

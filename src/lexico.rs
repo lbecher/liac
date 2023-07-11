@@ -1,8 +1,6 @@
 use debug_print::debug_println;
 
-#[path ="comum.rs"]
-mod comum;
-use crate::comum::Tokens;
+use liac::*;
 
 pub fn analize_lexica(mut entrada: Vec<u8>) -> Result<Vec<Tokens>, ()> {
     let mut tokens: Vec<Tokens> = Vec::new();

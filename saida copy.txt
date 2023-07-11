@@ -1,0 +1,296 @@
+---------------------------------------
+Iniciando análise léxica...
+-------------
+
+[AbreBlocoDATA, QuebraDeLinha, TipoDeVariavel("INT32"), DoisPontos, IdDeVariavel("x"), Virgula, IdDeVariavel("y"), Virgula, IdDeVariavel("z"), PontoEVirgula, QuebraDeLinha, FechaBlocoDATA, QuebraDeLinha, AbreBlocoMAIN, QuebraDeLinha, Set, DoisPontos, IdDeVariavel("x"), Virgula, Numero("1"), PontoEVirgula, QuebraDeLinha, Set, DoisPontos, IdDeVariavel("y"), Virgula, IdDeVariavel("x"), PontoEVirgula, QuebraDeLinha, Set, DoisPontos, IdDeVariavel("z"), Virgula, Numero("2"), PontoEVirgula, QuebraDeLinha, Print, DoisPontos, String("Hello world!"), PontoEVirgula, QuebraDeLinha, Print, DoisPontos, String("%d %d %d\n"), Virgula, IdDeVariavel("x"), Virgula, IdDeVariavel("y"), Virgula, IdDeVariavel("z"), PontoEVirgula, QuebraDeLinha, FechaBlocoMAIN]
+-------------
+Análise léxica terminou sem erros.
+---------------------------------------
+
+---------------------------------------
+Iniciando análise sintática...
+-------------
+
+Pilha: [Estados(0)]
+Ação: Empilha(100)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100)]
+Ação: Empilha(105)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105)]
+Ação: Empilha(106)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106)]
+Ação: Empilha(108)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108)]
+Ação: Empilha(110)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110)]
+Ação: Empilha(108)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110), Tokens(IdDeVariavel("y")), Estados(108)]
+Ação: Empilha(110)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110), Tokens(IdDeVariavel("y")), Estados(108), Tokens(Virgula), Estados(110)]
+Ação: Empilha(108)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110), Tokens(IdDeVariavel("y")), Estados(108), Tokens(Virgula), Estados(110), Tokens(IdDeVariavel("z")), Estados(108)]
+Ação: Empilha(109)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110), Tokens(IdDeVariavel("y")), Estados(108), Tokens(Virgula), Estados(110), Tokens(IdDeVariavel("z")), Estados(108), Tokens(PontoEVirgula), Estados(109)]
+Ação: Reduz(11)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110), Tokens(IdDeVariavel("y")), Estados(108), Tokens(Virgula), Estados(110), NaoTerminais(G)]
+Ação: VaiPara(111)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110), Tokens(IdDeVariavel("y")), Estados(108), Tokens(Virgula), Estados(110), NaoTerminais(G), Estados(111)]
+Ação: Reduz(12)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110), NaoTerminais(G)]
+Ação: VaiPara(111)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), Tokens(IdDeVariavel("x")), Estados(108), Tokens(Virgula), Estados(110), NaoTerminais(G), Estados(111)]
+Ação: Reduz(12)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), NaoTerminais(G)]
+Ação: VaiPara(107)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), Tokens(TipoDeVariavel("INT32")), Estados(105), Tokens(DoisPontos), Estados(106), NaoTerminais(G), Estados(107)]
+Ação: Reduz(10)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), NaoTerminais(F)]
+Ação: VaiPara(103)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), NaoTerminais(F), Estados(103)]
+Ação: Reduz(8)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), NaoTerminais(E)]
+Ação: VaiPara(101)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), NaoTerminais(E), Estados(101)]
+Ação: Empilha(102)
+
+Pilha: [Estados(0), Tokens(AbreBlocoDATA), Estados(100), NaoTerminais(E), Estados(101), Tokens(FechaBlocoDATA), Estados(102)]
+Ação: Reduz(3)
+
+Pilha: [Estados(0), NaoTerminais(A)]
+Ação: VaiPara(2)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2)]
+Ação: Empilha(97)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97)]
+Ação: Empilha(47)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), Tokens(Set), Estados(47)]
+Ação: Empilha(48)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48)]
+Ação: Empilha(49)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("x")), Estados(49)]
+Ação: Empilha(50)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("x")), Estados(49), Tokens(Virgula), Estados(50)]
+Ação: Empilha(52)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("x")), Estados(49), Tokens(Virgula), Estados(50), Tokens(Numero("1")), Estados(52)]
+Ação: Empilha(53)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("x")), Estados(49), Tokens(Virgula), Estados(50), Tokens(Numero("1")), Estados(52), Tokens(PontoEVirgula), Estados(53)]
+Ação: Reduz(23)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("x")), Estados(49), Tokens(Virgula), Estados(50), NaoTerminais(J)]
+Ação: VaiPara(51)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("x")), Estados(49), Tokens(Virgula), Estados(50), NaoTerminais(J), Estados(51)]
+Ação: Reduz(19)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I)]
+Ação: VaiPara(10)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10)]
+Ação: Empilha(47)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47)]
+Ação: Empilha(48)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48)]
+Ação: Empilha(49)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("y")), Estados(49)]
+Ação: Empilha(50)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("y")), Estados(49), Tokens(Virgula), Estados(50)]
+Ação: Empilha(54)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("y")), Estados(49), Tokens(Virgula), Estados(50), Tokens(IdDeVariavel("x")), Estados(54)]
+Ação: Empilha(55)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("y")), Estados(49), Tokens(Virgula), Estados(50), Tokens(IdDeVariavel("x")), Estados(54), Tokens(PontoEVirgula), Estados(55)]
+Ação: Reduz(24)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("y")), Estados(49), Tokens(Virgula), Estados(50), NaoTerminais(J)]
+Ação: VaiPara(51)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("y")), Estados(49), Tokens(Virgula), Estados(50), NaoTerminais(J), Estados(51)]
+Ação: Reduz(19)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I)]
+Ação: VaiPara(10)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10)]
+Ação: Empilha(47)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47)]
+Ação: Empilha(48)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48)]
+Ação: Empilha(49)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("z")), Estados(49)]
+Ação: Empilha(50)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("z")), Estados(49), Tokens(Virgula), Estados(50)]
+Ação: Empilha(52)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("z")), Estados(49), Tokens(Virgula), Estados(50), Tokens(Numero("2")), Estados(52)]
+Ação: Empilha(53)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("z")), Estados(49), Tokens(Virgula), Estados(50), Tokens(Numero("2")), Estados(52), Tokens(PontoEVirgula), Estados(53)]
+Ação: Reduz(23)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("z")), Estados(49), Tokens(Virgula), Estados(50), NaoTerminais(J)]
+Ação: VaiPara(51)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Set), Estados(47), Tokens(DoisPontos), Estados(48), Tokens(IdDeVariavel("z")), Estados(49), Tokens(Virgula), Estados(50), NaoTerminais(J), Estados(51)]
+Ação: Reduz(19)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I)]
+Ação: VaiPara(10)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10)]
+Ação: Empilha(62)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62)]
+Ação: Empilha(63)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63)]
+Ação: Empilha(64)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("Hello world!")), Estados(64)]
+Ação: Empilha(65)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("Hello world!")), Estados(64), Tokens(PontoEVirgula), Estados(65)]
+Ação: Reduz(20)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I)]
+Ação: VaiPara(10)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10)]
+Ação: Empilha(62)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62)]
+Ação: Empilha(63)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63)]
+Ação: Empilha(64)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64)]
+Ação: Empilha(66)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66)]
+Ação: Empilha(72)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72)]
+Ação: Empilha(74)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74)]
+Ação: Empilha(72)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74), Tokens(IdDeVariavel("y")), Estados(72)]
+Ação: Empilha(74)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74), Tokens(IdDeVariavel("y")), Estados(72), Tokens(Virgula), Estados(74)]
+Ação: Empilha(72)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74), Tokens(IdDeVariavel("y")), Estados(72), Tokens(Virgula), Estados(74), Tokens(IdDeVariavel("z")), Estados(72)]
+Ação: Empilha(73)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74), Tokens(IdDeVariavel("y")), Estados(72), Tokens(Virgula), Estados(74), Tokens(IdDeVariavel("z")), Estados(72), Tokens(PontoEVirgula), Estados(73)]
+Ação: Reduz(30)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74), Tokens(IdDeVariavel("y")), Estados(72), Tokens(Virgula), Estados(74), NaoTerminais(K)]
+Ação: VaiPara(75)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74), Tokens(IdDeVariavel("y")), Estados(72), Tokens(Virgula), Estados(74), NaoTerminais(K), Estados(75)]
+Ação: Reduz(31)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74), NaoTerminais(K)]
+Ação: VaiPara(75)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), Tokens(IdDeVariavel("x")), Estados(72), Tokens(Virgula), Estados(74), NaoTerminais(K), Estados(75)]
+Ação: Reduz(31)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), NaoTerminais(K)]
+Ação: VaiPara(67)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), Tokens(Print), Estados(62), Tokens(DoisPontos), Estados(63), Tokens(String("%d %d %d\n")), Estados(64), Tokens(Virgula), Estados(66), NaoTerminais(K), Estados(67)]
+Ação: Reduz(21)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I)]
+Ação: VaiPara(10)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10)]
+Ação: Reduz(13)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(H)]
+Ação: VaiPara(11)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(H), Estados(11)]
+Ação: Reduz(14)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(H)]
+Ação: VaiPara(11)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(H), Estados(11)]
+Ação: Reduz(14)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(H)]
+Ação: VaiPara(11)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(I), Estados(10), NaoTerminais(H), Estados(11)]
+Ação: Reduz(14)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(H)]
+Ação: VaiPara(11)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(I), Estados(10), NaoTerminais(H), Estados(11)]
+Ação: Reduz(14)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(H)]
+Ação: VaiPara(98)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(H), Estados(98)]
+Ação: Empilha(99)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), Tokens(AbreBlocoMAIN), Estados(97), NaoTerminais(H), Estados(98), Tokens(FechaBlocoMAIN), Estados(99)]
+Ação: Reduz(4)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), NaoTerminais(B)]
+Ação: VaiPara(3)
+
+Pilha: [Estados(0), NaoTerminais(A), Estados(2), NaoTerminais(B), Estados(3)]
+Ação: Reduz(1)
+
+Pilha: [Estados(0), NaoTerminais(S)]
+Ação: VaiPara(1)
+
+Pilha: [Estados(0), NaoTerminais(S), Estados(1)]
+Ação: Aceita
+
+-------------
+Análise sintática terminou sem erros.
+---------------------------------------
+
