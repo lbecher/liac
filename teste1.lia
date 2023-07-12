@@ -1,8 +1,13 @@
 #DATA:
     INT32: x, y, z;
 #DATA;
+
 #MAIN:
-    PRINT: "Digite tres nemeros: ";
-    SCAN: "%d %d %d", x, y, z;
+    BLOC: FAZER_SCAN;
     PRINT: "Os numeros que voce digitou: %d %d %d\n", x, y, z;
 #MAIN;
+
+#FAZER_SCAN:
+    PRINT: "Digite tres nemeros: ";
+    SCAN: "%d %d %d", x, y, z;
+#FAZER_SCAN;

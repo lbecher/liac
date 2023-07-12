@@ -8,6 +8,7 @@ use crate::llvm::*;
 #[derive(Debug, Clone)]
 pub struct Semantico {
     variaveis_globais: HashMap<String, ParametroLLVM>,
+    blocos_de_codigos: HashMap<String, bool>,
     pilha_de_tokens: Vec<Tokens>,
     pilha_de_parametros: Vec<ParametroLLVM>,
     retorno_de_operador: Option<ParametroLLVM>,
@@ -18,6 +19,7 @@ impl Semantico {
     pub fn inicializar() -> Self {
         Self {
             variaveis_globais: HashMap::new(),
+            blocos_de_codigos: HashMap::new(),
             pilha_de_tokens: Vec::new(),
             pilha_de_parametros: Vec::new(),
             retorno_de_operador: None,
@@ -37,6 +39,9 @@ impl Semantico {
                     }
                     Tokens::IdDeBloco(id_de_bloco) => {
                         self.pilha_de_tokens.push(Tokens::IdDeBloco(id_de_bloco));
+                    }
+                    Tokens::AbreBlocoDeCodigo(id_de_bloco) => {
+                        self.pilha_de_tokens.push(Tokens::AbreBlocoDeCodigo(id_de_bloco));
                     }
                     Tokens::Operador(operador) => {
                         self.pilha_de_tokens.push(Tokens::Operador(operador));
@@ -60,8 +65,27 @@ impl Semantico {
                 self.llvm.gerar_bloco_main();
                 return Ok(());
             }
+            7 => {
+                println!(":::\n{:?}\n{:?}", self.pilha_de_tokens, self.pilha_de_parametros);
+                if let Some(Tokens::AbreBlocoDeCodigo(bloco)) = self.pilha_de_tokens.pop() {
+                    if let Some(declarado) = self.blocos_de_codigos.get_mut(bloco.as_str()) {
+                        *declarado = true;
+                    } else {
+                        self.blocos_de_codigos.insert(bloco.to_string(), true);
+                    }
+
+                    self.llvm.gerar_bloco(bloco.as_str());
+
+                    return Ok(());
+                } else {
+                    return Err(String::from("ERRO NO COMPILADOR: Sei lá!"));
+                }
+            }
             10 => {
                 return self.declarar_variaveis();
+            }
+            18 => {
+                return self.gerar_chamada_de_bloco();
             }
             19 => {
                 return self.modificar_variavel();
@@ -365,6 +389,24 @@ impl Semantico {
         }
 
         Ok(())
+    }
+
+    fn gerar_chamada_de_bloco(&mut self) -> Result<(), String> {
+        if let Some(Tokens::IdDeBloco(bloco)) = self.pilha_de_tokens.pop() {
+            if self.blocos_de_codigos.get(bloco.as_str()).is_none() {
+                self.blocos_de_codigos.insert(bloco.to_string(), true);
+            }
+
+            self.llvm.gerar_chamada_de_bloco(ParametroLLVM::instanciar(
+                bloco.as_str(),
+                TipoDeParametroLLVM::Bloco,
+                TipoDeDado::Undefined,
+            ));
+            
+            return Ok(());
+        } else {
+            return Err(String::from("ERRO NO COMPILADOR: Sei lá!"));
+        }
     }
 
     fn empilhar_parametros_do_scan(&mut self) -> Result<(), String> {

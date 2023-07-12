@@ -102,6 +102,7 @@ pub enum TipoDeDado {
     Uint16,
     Uint32,
     Uint64,
+    Undefined,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -167,6 +168,7 @@ pub enum TipoDeParametroLLVM {
     VariavelTemporaria,
     String,
     Caractere,
+    Bloco,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -199,6 +201,7 @@ impl ParametroLLVM {
             TipoDeDado::Uint16 => (16, 2, false),
             TipoDeDado::Uint32 => (32, 4, false),
             TipoDeDado::Uint64 => (64, 8, false),
+            TipoDeDado::Undefined => (64, 8, false),
         };
 
         let mut tamanho_array: usize = 0;
@@ -222,6 +225,7 @@ impl ParametroLLVM {
                 TipoDeParametroLLVM::VariavelGlobal => format!("@{}", parametro),
                 TipoDeParametroLLVM::VariavelTemporaria => format!("%{}", parametro),
                 TipoDeParametroLLVM::Caractere => format!("'{}'", parametro),
+                TipoDeParametroLLVM::Bloco => format!("@bloc_{}()", parametro),
             },
             tipo_de_parametro: tipo_de_parametro.clone(),
             tipo_de_dado,

@@ -100,7 +100,7 @@ impl LLVM {
             }
             Comandos::ChamarBloco => {
                 self.codigo_llvm_de_bloco = format!(
-                    "{0}  call void @bloc_{1}",
+                    "{0}  call void {1}\n",
                     self.codigo_llvm_de_bloco,
                     comando_llvm.parametros[0].parametro,
                 );
@@ -720,5 +720,16 @@ impl LLVM {
         }
 
         return destino;
+    }
+
+    pub fn gerar_chamada_de_bloco(&mut self, bloco: ParametroLLVM) {
+        let comando = ComandoLLVM {
+            comando: Comandos::ChamarBloco,
+            destino: None,
+            parametros: vec![
+                bloco
+            ],
+        };
+        self.gerar_comando_llvm(comando);
     }
 }
