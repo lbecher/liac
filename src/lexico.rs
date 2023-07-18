@@ -82,6 +82,9 @@ pub fn analize_lexica(mut entrada: Vec<u8>) -> Result<Vec<Tokens>, ()> {
             } else if let Ok(resultado) = tkz::bloc(&entrada) {
                 entrada.drain(0..resultado.0);
                 tokens.push(resultado.1);
+            } else if let Ok(resultado) = tkz::retorno(&entrada) {
+                entrada.drain(0..resultado.0);
+                tokens.push(resultado.1);
             } else if let Ok(resultado) = tkz::operador(&entrada) {
                 entrada.drain(0..resultado.0);
                 tokens.push(resultado.1);
@@ -217,6 +220,26 @@ mod tkz {
                 }
 
                 return Ok((resultado.len(), Tokens::QuebraDeLinha));
+            }
+
+            Err(_e) => {
+                return Err(());
+            }
+        };
+    }
+
+    pub fn retorno(entrada: &[u8]) -> Result<(usize, Tokens), ()> {
+        let analizador = seq(b"RETURN");
+
+        match analizador.parse(entrada) {
+            Ok(saida) => {
+                let mut resultado: Vec<u8> = Vec::new();
+
+                for caractere in saida {
+                    resultado.push(*caractere);
+                }
+
+                return Ok((resultado.len(), Tokens::Return));
             }
 
             Err(_e) => {

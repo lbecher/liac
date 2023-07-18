@@ -1,3 +1,4 @@
+use regex::Regex;
 
 // ---------------------------------
 // Léxico 
@@ -27,6 +28,7 @@ pub enum Tokens {
     FechaBlocoDATA,
     AbreBlocoMAIN,
     FechaBlocoMAIN,
+    Return,
     AbreBlocoDeCodigo(String),
     FechaBlocoDeCodigo(String),
     Operador(String),
@@ -111,6 +113,82 @@ pub struct VariavelGlobal {
     pub inicializada: bool,
 }
 
+pub fn obter_maximo_minimo(texto: &str) -> Option<(usize, usize)> {
+    // Define a expressão regular para encontrar padrões como %<numero> ou <numero>:
+    let re = Regex::new(r"%(\d+)|(\d+):").unwrap();
+
+    // Variáveis para armazenar o máximo e o mínimo encontrados:
+    let mut maximo: Option<usize> = None;
+    let mut minimo: Option<usize> = None;
+
+    // Itera sobre as correspondências encontradas na string:
+    for caps in re.captures_iter(texto) {
+        if let Some(numero) = caps.get(1) {
+            // Se for do tipo %<numero>
+            let numero_atual = numero.as_str().parse::<usize>().unwrap();
+            maximo = Some(maximo.unwrap_or(numero_atual).max(numero_atual));
+            minimo = Some(minimo.unwrap_or(numero_atual).min(numero_atual));
+        } else if let Some(numero) = caps.get(2) {
+            // Se for do tipo <numero>:
+            let numero_atual = numero.as_str().parse::<usize>().unwrap();
+            maximo = Some(maximo.unwrap_or(numero_atual).max(numero_atual));
+            minimo = Some(minimo.unwrap_or(numero_atual).min(numero_atual));
+        }
+    }
+
+    // Retorna o resultado como uma tupla opcional
+    maximo.and_then(|max| minimo.map(|min| (max, min)))
+}
+
+pub fn substituir_com_incremento(texto: &str, incremento: usize) -> String {
+    // Define a expressão regular para encontrar padrões como %<numero> ou <numero>:
+    let re = Regex::new(r"%(\d+)|(\d+):").unwrap();
+
+    // Substitui os padrões na string usando uma closure:
+    let resultado = re.replace_all(texto, |caps: &regex::Captures| {
+        if let Some(numero) = caps.get(1) {
+            // Se for do tipo %<numero>, faz a substituição
+            let numero_antigo = numero.as_str().parse::<usize>().unwrap();
+            let novo_numero = numero_antigo.wrapping_add(incremento); // Usamos wrapping_add para evitar estouro numérico.
+            format!("%{}", novo_numero)
+        } else if let Some(numero) = caps.get(2) {
+            // Se for do tipo <numero>:
+            let numero_antigo = numero.as_str().parse::<usize>().unwrap();
+            let novo_numero = numero_antigo.wrapping_add(incremento); // Usamos wrapping_add para evitar estouro numérico.
+            format!("{}", novo_numero)
+        } else {
+            // Se não for um padrão conhecido, retorna o próprio texto.
+            caps.get(0).unwrap().as_str().to_string()
+        }
+    });
+
+    resultado.to_string()
+}
+
+pub fn substituir_com_decremento(texto: &str, decremento: usize) -> String {
+    // Define a expressão regular para encontrar padrões como %<numero> ou <numero>:
+    let re = Regex::new(r"%(\d+)|(\d+):").unwrap();
+
+    // Substitui os padrões na string usando uma closure:
+    let resultado = re.replace_all(texto, |caps: &regex::Captures| {
+        if let Some(numero) = caps.get(1) {
+            // Se for do tipo %<numero>, faz a substituição
+            let numero_antigo = numero.as_str().parse::<usize>().unwrap();
+            let novo_numero = numero_antigo.wrapping_sub(decremento); // Usamos wrapping_sub para evitar estouro numérico.
+            format!("%{}", novo_numero)
+        } else if let Some(numero) = caps.get(2) {
+            // Se for do tipo <numero>:
+            let numero_antigo = numero.as_str().parse::<usize>().unwrap();
+            let novo_numero = numero_antigo.wrapping_sub(decremento); // Usamos wrapping_sub para evitar estouro numérico.
+            format!("{}", novo_numero)
+        } else {
+            // Se não for um padrão conhecido, retorna o próprio texto.
+            caps.get(0).unwrap().as_str().to_string()
+        }
+    });
+
+    resultado.to_string()
+}
 
 // ---------------------------------
 // LLVM 
@@ -158,6 +236,7 @@ pub enum Comandos {
     And,
     Not,
     Or,
+    Diferente,
 }
 
 #[allow(dead_code)]

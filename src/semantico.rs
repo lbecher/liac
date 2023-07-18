@@ -13,6 +13,7 @@ pub struct Semantico {
     pilha_de_parametros: Vec<ParametroLLVM>,
     retorno_de_operador: Option<ParametroLLVM>,
     llvm: LLVM,
+    pilha_de_blocos: Vec<Tokens>,
 }
 
 impl Semantico {
@@ -24,7 +25,13 @@ impl Semantico {
             pilha_de_parametros: Vec::new(),
             retorno_de_operador: None,
             llvm: LLVM::inicializar(),
+            pilha_de_blocos: Vec::new(),
         }
+    }
+
+    pub fn empilha_bloco(&mut self, bloco_de_codigo: Tokens) {
+        self.pilha_de_blocos.push(bloco_de_codigo);
+        self.llvm.bloco_basico_para_bloco_de_funcao();
     }
 
     pub fn tratar_desempilhamento(&mut self, pilha: Vec<ElementosDaPilha>, estado: usize) -> Result<(), String> {
@@ -61,12 +68,18 @@ impl Semantico {
         }
 
         match estado {
+            1 => {
+                return self.verificar_declaracao_de_blocos();
+            }
+            2 => {
+                return self.verificar_declaracao_de_blocos();
+            }
             4 => {
+                self.llvm.bloco_basico_para_bloco_de_funcao();
                 self.llvm.gerar_bloco_main();
                 return Ok(());
             }
             7 => {
-                println!(":::\n{:?}\n{:?}", self.pilha_de_tokens, self.pilha_de_parametros);
                 if let Some(Tokens::AbreBlocoDeCodigo(bloco)) = self.pilha_de_tokens.pop() {
                     if let Some(declarado) = self.blocos_de_codigos.get_mut(bloco.as_str()) {
                         *declarado = true;
@@ -74,6 +87,7 @@ impl Semantico {
                         self.blocos_de_codigos.insert(bloco.to_string(), true);
                     }
 
+                    self.llvm.bloco_basico_para_bloco_de_funcao();
                     self.llvm.gerar_bloco(bloco.as_str());
 
                     return Ok(());
@@ -84,24 +98,58 @@ impl Semantico {
             10 => {
                 return self.declarar_variaveis();
             }
+            15 => {
+                self.pilha_de_blocos.pop();
+                return self.gerar_inz();
+            }
+            16 => {
+                self.pilha_de_blocos.pop();
+                return self.gerar_wnz();
+            }
             18 => {
                 return self.gerar_chamada_de_bloco();
             }
             19 => {
                 return self.modificar_variavel();
             }
+
+            // PRINT
             20 => {
                 return self.gerar_print();
             }
             21 => {
                 return self.gerar_print();
             }
+
+            // SCAN
             22 => {
                 return self.gerar_scan();
             }
-            28 => {
-                return self.empilhar_parametros_do_print();
+
+            // RETURN
+            23 => {
+                self.llvm.gerar_retorno();
+                return Ok(());
             }
+
+            // parametros do SET
+            24 => {
+                return self.empilhar_parametro_do_set();
+            }
+            25 => {
+                return self.empilhar_parametro_do_set();
+            }
+            26 => {
+                return self.empilhar_parametro_do_set();
+            }
+            27 => {
+                return self.empilhar_parametro_do_set();
+            }
+            28 => {
+                return self.empilhar_parametro_do_set();
+            }
+
+            // parametros do PRINT
             29 => {
                 return self.empilhar_parametros_do_print();
             }
@@ -130,16 +178,56 @@ impl Semantico {
                 return self.empilhar_parametros_do_print();
             }
             38 => {
-                return self.empilhar_parametros_do_scan();
+                return self.empilhar_parametros_do_print();
             }
+
+            // parametros do SCAN
             39 => {
                 return self.empilhar_parametros_do_scan();
             }
-            /*=> {
-                //return self.operacao_matematica();
-            }*/
+            40 => {
+                return self.empilhar_parametros_do_scan();
+            }
+            
+            // operação
+            41 => {
+                return self.gerar_operacao();
+            }
+            42 => {
+                return self.gerar_operacao();
+            }
+
+            // segundo parametro da operação
+            43 => {
+                return self.obter_operando2_de_operacao();
+            }
+            44 => {
+                return self.obter_operando2_de_operacao();
+            }
+            45 => {
+                return self.obter_operando2_de_operacao();
+            }
+
+            // parametro de comparação do INZ/WNZ
+            46 => {
+                return self.empilhar_parametro_de_comparacao();
+            }
+            47 => {
+                return self.empilhar_parametro_de_comparacao();
+            }
+
             _ => {}
         }
+        Ok(())
+    }
+
+    fn verificar_declaracao_de_blocos(&mut self) -> Result<(), String> {
+        for (bloco, declarado) in self.blocos_de_codigos.clone() {
+            if !declarado {
+                return Err(format!("ERRO SEMÂNTICO: O bloco '{}' não declarado!", bloco));
+            }
+        }
+
         Ok(())
     }
 
@@ -250,95 +338,36 @@ impl Semantico {
             }
         };
 
-        let proximo_token = self.pilha_de_tokens.pop();
+        let atribuicao: ParametroLLVM = match self.pilha_de_parametros.pop() {
+            Some(mut parametro) => {
+                if parametro.tipo_de_parametro.clone() == TipoDeParametroLLVM::Numero {
+                    match Semantico::numero_compativel(
+                        var_de_destino.tipo_de_dado.clone(),
+                        parametro.parametro.as_str(),
+                    ) {
+                        Ok(compativel) => {
+                            if !compativel {
+                                return Err(format!(
+                                    "ERRO SEMÂNTICO: O número '{}' não é compatível com {:?}!",
+                                    parametro.parametro,
+                                    var_de_destino.tipo_de_dado.clone(),
+                                ));
+                            }
 
-        let atribuicao: ParametroLLVM = match proximo_token.clone() {
-            Some(Tokens::Numero(numero)) => {
-                match Semantico::numero_compativel(
-                    TipoDeDado::Int32,
-                    numero.as_str(),
-                ) {
-                    Ok(compativel) => {
-                        if !compativel {
-                            return Err(format!("ERRO SEMÂNTICO: O número '{}' não é compatível com {:?}!", numero, TipoDeDado::Int32));
+                            parametro = ParametroLLVM::instanciar(
+                                parametro.parametro.as_str(),
+                                TipoDeParametroLLVM::Numero,
+                                var_de_destino.tipo_de_dado.clone(),
+                            )
                         }
+                        Err(erro) => return Err(erro),
                     }
-                    Err(erro) => return Err(erro),
                 }
 
-                ParametroLLVM::instanciar(
-                    numero.as_str(),
-                    TipoDeParametroLLVM::Numero,
-                    var_de_destino.tipo_de_dado.clone(),
-                )
+                parametro
             }
-            Some(Tokens::Caractere(caracter)) => {
-                if var_de_destino.tipo_de_dado.clone() != TipoDeDado::Char {
-                    return Err(format!(
-                        "ERRO SEMÂNTICO: O caracter '{}' não é compatível com {:?}!", 
-                        caracter, 
-                        var_de_destino.tipo_de_dado.clone(),
-                    ));
-                }
-
-                ParametroLLVM::instanciar(
-                    caracter.as_str(),
-                    TipoDeParametroLLVM::Caractere,
-                    TipoDeDado::Char,
-                )
-            }
-            Some(Tokens::String(string)) => {
-                if var_de_destino.tipo_de_dado.clone() != TipoDeDado::Char {
-                    return Err(format!(
-                        "ERRO SEMÂNTICO: A string '{}' não é compatível com {:?}!", 
-                        string, 
-                        var_de_destino.tipo_de_dado.clone(),
-                    ));
-                }
-
-                ParametroLLVM::instanciar(
-                    string.as_str(),
-                    TipoDeParametroLLVM::String,
-                    TipoDeDado::String,
-                )
-            }
-            Some(Tokens::IdDeVariavel(id)) => {
-                if let Some(var_global) = self.variaveis_globais.get(id.as_str()) {
-                    if var_de_destino.tipo_de_dado.clone() != var_global.tipo_de_dado.clone() {
-                        return Err(format!(
-                            "ERRO SEMÂNTICO: a variável {} não é compatível com {:?}!",
-                            var_de_destino.parametro,
-                            var_global.tipo_de_dado,
-                        ));
-                    }
-
-                    var_global.clone()
-                } else {
-                    return Err(format!(
-                        "ERRO SEMÂNTICO: Variável @{} não declarada!",
-                        id,
-                    ));
-                }
-            }
-            _ => {
-                if let Some(pt) = proximo_token {
-                    self.pilha_de_tokens.push(pt);
-                };
-
-                if let Some(retorno_de_operador) = self.retorno_de_operador.clone() {
-                    if var_de_destino.tipo_de_dado.clone() != retorno_de_operador.tipo_de_dado.clone() {
-                        return Err(format!(
-                            "ERRO SEMÂNTICO: a variável {} não é compatível com {:?}!",
-                            var_de_destino.parametro,
-                            retorno_de_operador.tipo_de_dado,
-                        ));
-                    }
-
-                    self.retorno_de_operador = None;
-                    retorno_de_operador
-                } else {
-                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::modificar_variavel()!"));
-                }
+            None => {
+                return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::modificar_variavel()!"));
             }
         };
 
@@ -391,6 +420,24 @@ impl Semantico {
         Ok(())
     }
 
+    fn gerar_inz(&mut self) -> Result<(), String> {
+        if let Some(parametro) = self.pilha_de_parametros.pop() {
+            self.llvm.gerar_inz(parametro);
+            return Ok(());
+        } else {
+            return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_inz()!"));
+        }
+    }
+
+    fn gerar_wnz(&mut self) -> Result<(), String> {
+        if let Some(parametro) = self.pilha_de_parametros.pop() {
+            self.llvm.gerar_wnz(parametro);
+            return Ok(());
+        } else {
+            return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_wnz()!"));
+        }
+    }
+
     fn gerar_chamada_de_bloco(&mut self) -> Result<(), String> {
         if let Some(Tokens::IdDeBloco(bloco)) = self.pilha_de_tokens.pop() {
             if self.blocos_de_codigos.get(bloco.as_str()).is_none() {
@@ -407,6 +454,140 @@ impl Semantico {
         } else {
             return Err(String::from("ERRO NO COMPILADOR: Sei lá!"));
         }
+    }
+
+    fn empilhar_parametro_de_comparacao(&mut self) -> Result<(), String> {
+        let token = self.pilha_de_tokens.pop();
+
+        let parametro: ParametroLLVM = match token.clone() {
+            Some(Tokens::Numero(numero)) => {
+                ParametroLLVM::instanciar(
+                    numero.as_str(),
+                    TipoDeParametroLLVM::Numero,
+                    TipoDeDado::Undefined,
+                )
+            }
+            Some(Tokens::IdDeVariavel(id)) => {
+                if let Some(var_global) = self.variaveis_globais.get(id.as_str()) {
+                    var_global.clone()
+                } else {
+                    return Err(format!(
+                        "ERRO SEMÂNTICO: Variável @{} não declarada!",
+                        id,
+                    ));
+                }
+            }
+            _ => {
+                if let Some(t) = token {
+                    self.pilha_de_tokens.push(t);
+                };
+
+                if let Some(retorno_de_operador) = self.retorno_de_operador.clone() {
+                    self.retorno_de_operador = None;
+                    retorno_de_operador
+                } else {
+                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::empilhar_parametro_de_comparacao()!"));
+                }
+            }
+        };
+
+        self.pilha_de_parametros.push(parametro);
+
+        Ok(())
+    }
+
+    fn obter_operando2_de_operacao(&mut self) -> Result<(), String> {
+        let token = self.pilha_de_tokens.pop();
+
+        let parametro: ParametroLLVM = match token.clone() {
+            Some(Tokens::Numero(numero)) => {
+                ParametroLLVM::instanciar(
+                    numero.as_str(),
+                    TipoDeParametroLLVM::Numero,
+                    TipoDeDado::Undefined,
+                )
+            }
+            Some(Tokens::IdDeVariavel(id)) => {
+                if let Some(var_global) = self.variaveis_globais.get(id.as_str()) {
+                    var_global.clone()
+                } else {
+                    return Err(format!(
+                        "ERRO SEMÂNTICO: Variável @{} não declarada!",
+                        id,
+                    ));
+                }
+            }
+            _ => {
+                if let Some(t) = token {
+                    self.pilha_de_tokens.push(t);
+                };
+
+                if let Some(retorno_de_operador) = self.retorno_de_operador.clone() {
+                    self.retorno_de_operador = None;
+                    retorno_de_operador
+                } else {
+                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::empilhar_parametro_de_comparacao()!"));
+                }
+            }
+        };
+
+        self.retorno_de_operador = Some(parametro);
+
+        Ok(())
+    }
+
+    fn empilhar_parametro_do_set(&mut self) -> Result<(), String> {
+        let token = self.pilha_de_tokens.pop();
+
+        let parametro: ParametroLLVM = match token.clone() {
+            Some(Tokens::Numero(numero)) => {
+                ParametroLLVM::instanciar(
+                    numero.as_str(),
+                    TipoDeParametroLLVM::Numero,
+                    TipoDeDado::Undefined,
+                )
+            }
+            Some(Tokens::Caractere(caracter)) => {
+                ParametroLLVM::instanciar(
+                    caracter.as_str(),
+                    TipoDeParametroLLVM::Caractere,
+                    TipoDeDado::Char,
+                )
+            }
+            Some(Tokens::String(string)) => {
+                ParametroLLVM::instanciar(
+                    string.as_str(),
+                    TipoDeParametroLLVM::String,
+                    TipoDeDado::String,
+                )
+            }
+            Some(Tokens::IdDeVariavel(id)) => {
+                if let Some(var_global) = self.variaveis_globais.get(id.as_str()) {
+                    var_global.clone()
+                } else {
+                    return Err(format!(
+                        "ERRO SEMÂNTICO: Variável @{} não declarada!",
+                        id,
+                    ));
+                }
+            }
+            _ => {
+                if let Some(t) = token {
+                    self.pilha_de_tokens.push(t);
+                };
+
+                if let Some(retorno_de_operador) = self.retorno_de_operador.clone() {
+                    self.retorno_de_operador = None;
+                    retorno_de_operador
+                } else {
+                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::empilhar_parametros_do_print()!"));
+                }
+            }
+        };
+
+        self.pilha_de_parametros.push(parametro);
+
+        Ok(())
     }
 
     fn empilhar_parametros_do_scan(&mut self) -> Result<(), String> {
@@ -498,8 +679,8 @@ impl Semantico {
 
         Ok(())
     }
-/*
-    fn operacao_matematica(&mut self) -> Result<(), String> {
+
+    fn gerar_operacao(&mut self) -> Result<(), String> {
         if let Some(Tokens::Operador(operador)) = self.pilha_de_tokens.pop() {
             let operador = match operador.as_str() {
                 "ADD" => {
@@ -526,116 +707,128 @@ impl Semantico {
                 "NOT" => {
                     Operador::NOT
                 }
+                "A" => {
+                    Operador::A
+                }
+                "B" => {
+                    Operador::B
+                }
+                "AE" => {
+                    Operador::AE
+                }
+                "BE" => {
+                    Operador::BE
+                }
+                "E" => {
+                    Operador::E
+                }
                 _ => {
-                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::operacao_matematica():5!"));
+                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao():5!"));
                 }
             };
+
             if operador == Operador::NOT {
-
-            } else {
-                println!("{:?}", self.pilha_de_tokens);
-                println!("{:?}", self.pilha_de_heranca);
-
-                let mut operador2_token: Option<Tokens> = None;
-                let operador2_heranca: Option<ParametroLLVM> = self.pilha_de_heranca.pop();
-
-                if operador2_heranca.is_none() {
-                    operador2_token = self.pilha_de_tokens.pop();
-                }
-
-                let operador1 = self.pilha_de_tokens.pop();
-
-                match operador1.unwrap() {
-                    Tokens::IdDeVariavel(id_de_variavel) => {
-                        if let Some(operador1) = self.variaveis_globais.get(id_de_variavel.as_str()) {
-                            if !operador1.inicializada {
-                                return Err(format!("ERRO SEMÂNTICO: Variável '{}' não inicializada!", id_de_variavel));
-                            }
-
-                            if let Some(operador2) = operador2_heranca {
-                                if operador1.tipo.clone() == operador2.tipo_de_dado.clone() {
-                                    let retorno = self.llvm.gerar_operacao(
-                                        ParametroLLVM::instanciar(
-                                            id_de_variavel.as_str(),
-                                            TipoDeParametroLLVM::VariavelGlobal,
-                                            operador1.tipo.clone(),
-                                        ),
-                                        operador,
-                                        Some(operador2),
-                                    );
-                                    self.pilha_de_heranca.push(retorno);
-                                } else {
-                                    return Err(String::from("ERRO SEMÂNTICO: Parâmetros de tipos diferentes!"));
-                                }
-                            } else {
-                                if let Some(Tokens::IdDeVariavel(id_de_var_operador2)) = operador2_token {
-                                    if let Some(operador2) = self.variaveis_globais.get(id_de_var_operador2.as_str()) {
-                                        if operador1.tipo.clone() == operador2.tipo.clone() {
-                                            let retorno = self.llvm.gerar_operacao(
-                                                ParametroLLVM::instanciar(
-                                                    id_de_variavel.as_str(),
-                                                    TipoDeParametroLLVM::VariavelGlobal,
-                                                    operador1.tipo.clone(),
-                                                ),
-                                                operador,
-                                                Some(ParametroLLVM::instanciar(
-                                                    id_de_var_operador2.as_str(),
-                                                    TipoDeParametroLLVM::VariavelGlobal,
-                                                    operador2.tipo.clone(),
-                                                )),
-                                            );
-                                            self.pilha_de_heranca.push(retorno);
-                                        } else {
-                                            return Err(String::from("ERRO SEMÂNTICO: Parâmetros de tipos diferentes!"));
-                                        }
-                                    } else {
-                                        return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::operacao_matematica():4!"));
-                                    }
-                                } else if let Some(Tokens::Numero(numero)) = operador2_token {
-                                    match Self::numero_compativel(operador1.tipo.clone(), numero.as_str()) {
-                                        Ok(compativel) => {
-                                            if compativel {
-                                                let retorno = self.llvm.gerar_operacao(
-                                                    ParametroLLVM::instanciar(
-                                                        id_de_variavel.as_str(),
-                                                        TipoDeParametroLLVM::VariavelGlobal,
-                                                        operador1.tipo.clone(),
-                                                    ),
-                                                    operador,
-                                                    Some(ParametroLLVM::instanciar(
-                                                        numero.as_str(),
-                                                        TipoDeParametroLLVM::VariavelGlobal,
-                                                        operador1.tipo.clone(),
-                                                    )),
-                                                );
-                                                self.pilha_de_heranca.push(retorno);
-                                            } else {
-                                                return Err(format!("ERRO SEMÂNTICO: O número '{}' não é compatível com {:?}!", numero, operador1.tipo.clone()));
-                                            }
-                                        }
-                                        Err(erro) => {
-                                            return Err(erro);
-                                        }
-                                    }
-                                } else {
-                                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::operacao_matematica():3!"));
-                                }
-                            }
-                        } else {
-                            return Err(format!("ERRO SEMÂNTICO: Variável '{}' não declarada!", id_de_variavel));
-                        }
+                let id_operando1: String = match self.pilha_de_tokens.pop() {
+                    Some(Tokens::IdDeVariavel(id)) => {
+                        id.to_string()
                     }
                     _ => {
-                        return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::operacao_matematica():2!"));
+                        return Err(String::from(
+                            "ERRO NO COMPILADOR: Inconsistência em Semantico::modificar_variavel()!"
+                        ));
                     }
+                };
+        
+                let operando1: ParametroLLVM = match self.variaveis_globais.get(id_operando1.as_str()) {
+                    Some(var) => {
+                        var.clone()
+                    },
+                    None => {
+                        return Err(format!(
+                            "ERRO SEMÂNTICO: Variável @{} não declarada!",
+                            id_operando1,
+                        ));
+                    }
+                };
+
+                let retorno = self.llvm.gerar_operacao(operando1, operador, None);
+
+                self.retorno_de_operador = Some(retorno);
+            } else {
+                let id_operando1: String = match self.pilha_de_tokens.pop() {
+                    Some(Tokens::IdDeVariavel(id)) => {
+                        id.to_string()
+                    }
+                    _ => {
+                        return Err(String::from(
+                            "ERRO NO COMPILADOR: Inconsistência em Semantico::modificar_variavel()!"
+                        ));
+                    }
+                };
+        
+                let operando1: ParametroLLVM = match self.variaveis_globais.get(id_operando1.as_str()) {
+                    Some(var) => {
+                        var.clone()
+                    },
+                    None => {
+                        return Err(format!(
+                            "ERRO SEMÂNTICO: Variável @{} não declarada!",
+                            id_operando1,
+                        ));
+                    }
+                };
+
+                if let Some(operando2) = self.retorno_de_operador.clone() {
+
+                    if operando2.tipo_de_parametro.clone() == TipoDeParametroLLVM::Numero {
+                        match Semantico::numero_compativel(
+                            operando1.tipo_de_dado.clone(),
+                            operando2.parametro.as_str(),
+                        ) {
+                            Ok(compativel) => {
+                                if !compativel {
+                                    return Err(format!(
+                                        "ERRO SEMÂNTICO: O número '{}' não é compatível com {:?}!",
+                                        operando2.parametro,
+                                        operando1.tipo_de_dado.clone(),
+                                    ));
+                                }
+
+                                let numero = ParametroLLVM::instanciar(
+                                    operando2.parametro.as_str(),
+                                    TipoDeParametroLLVM::Numero,
+                                    operando1.tipo_de_dado.clone(),
+                                );
+
+                                let retorno = self.llvm.gerar_operacao(operando1, operador, Some(numero));
+                                self.retorno_de_operador = Some(retorno);
+                            }
+                            Err(erro) => return Err(erro),
+                        }
+                    } else if operando2.tipo_de_parametro.clone() == TipoDeParametroLLVM::VariavelGlobal {
+                        if operando2.tipo_de_dado.clone() != operando1.tipo_de_dado.clone() {
+                            return Err(format!(
+                                "ERRO SEMÂNTICO: A variável {} não é compatível com {:?}!",
+                                operando2.parametro,
+                                operando1.tipo_de_dado.clone(),
+                            ));
+                        }
+
+                        let retorno = self.llvm.gerar_operacao(operando1, operador, Some(operando2));
+                        self.retorno_de_operador = Some(retorno);
+                    } else {
+                        return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao()!"));
+                    }
+                } else {
+                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao()!"));
                 }
             }
             return Ok(());
         } else {
-            return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::operacao_matematica():1!"));
+            return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao()!"));
         }
     }
-*/
+
     fn numero_compativel(tipo: TipoDeDado, numero: &str) -> Result<bool, String> {
         let compativel = match tipo {
             TipoDeDado::Int8 => {

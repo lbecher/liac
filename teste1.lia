@@ -3,7 +3,13 @@
 #DATA;
 
 #MAIN:
-    BLOC: FAZER_SCAN;
+    SET: x, -1;
+    #WNZ: x:
+        BLOC: FAZER_SCAN;
+    #WNZ;
+    SET: x, NOT(x);
+    SET: y, MUL(y, -1);
+    SET: z, BE(z, y);
     PRINT: "Os numeros que voce digitou: %d %d %d\n", x, y, z;
 #MAIN;
 

@@ -60,6 +60,7 @@ impl Sintatico {
             (NaoTerminais::I, 4 as usize),
             (NaoTerminais::I, 5 as usize),
             (NaoTerminais::I, 5 as usize),
+            (NaoTerminais::I, 2 as usize),
             (NaoTerminais::J, 2 as usize),
             (NaoTerminais::J, 2 as usize),
             (NaoTerminais::J, 2 as usize),
@@ -121,6 +122,12 @@ impl Sintatico {
 
                     // empilha estado
                     self.pilha.push(ElementosDaPilha::Estados(estado));
+
+                    if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = self.simbolo_atual.clone() {
+                        self.semantico.empilha_bloco(Tokens::AbreBlocoINZ);
+                    } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = self.simbolo_atual.clone() {
+                        self.semantico.empilha_bloco(Tokens::AbreBlocoINZ);
+                    }
                 }
                 else if let Acoes::Reduz(producao) = acao
                 {
@@ -261,7 +268,7 @@ impl Sintatico {
         match estado {
             0 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Empilha(100));
+                    return Ok(Acoes::Empilha(102));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::S) = simbolo {
                     return Ok(Acoes::VaiPara(1));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::A) = simbolo {
@@ -279,7 +286,7 @@ impl Sintatico {
             },
             2 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Empilha(97));
+                    return Ok(Acoes::Empilha(99));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::B) = simbolo {
                     return Ok(Acoes::VaiPara(3));
                 } else {
@@ -332,6 +339,8 @@ impl Sintatico {
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
                     return Ok(Acoes::Reduz(1));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(1));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
                     return Ok(Acoes::Reduz(1));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(1));
@@ -400,6 +409,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(2));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(2));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(2));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(2));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -462,6 +473,8 @@ impl Sintatico {
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
                     return Ok(Acoes::Reduz(5));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(5));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
                     return Ok(Acoes::Reduz(5));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(5));
@@ -530,6 +543,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(6));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(6));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(6));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(6));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -561,6 +576,8 @@ impl Sintatico {
                     return Ok(Acoes::Empilha(62));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Empilha(88));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Empilha(97));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::H) = simbolo {
                     return Ok(Acoes::VaiPara(8));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::I) = simbolo {
@@ -622,6 +639,8 @@ impl Sintatico {
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
                     return Ok(Acoes::Reduz(7));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(7));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
                     return Ok(Acoes::Reduz(7));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(7));
@@ -686,6 +705,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(13));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Empilha(88));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Empilha(97));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(13));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -753,6 +774,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(14));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(14));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(14));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(14));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -808,6 +831,8 @@ impl Sintatico {
                     return Ok(Acoes::Empilha(62));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Empilha(88));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Empilha(97));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::H) = simbolo {
                     return Ok(Acoes::VaiPara(15));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::I) = simbolo {
@@ -870,6 +895,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(15));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(15));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(15));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(15));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -888,252 +915,260 @@ impl Sintatico {
             },
             17 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             18 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(42));
+                    return Ok(Acoes::Reduz(43));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             19 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(43));
+                    return Ok(Acoes::Reduz(44));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             20 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(44));
+                    return Ok(Acoes::Reduz(45));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -1163,63 +1198,65 @@ impl Sintatico {
             },
             24 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(40));
+                    return Ok(Acoes::Reduz(41));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -1248,63 +1285,65 @@ impl Sintatico {
             },
             27 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(41));
+                    return Ok(Acoes::Reduz(42));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -1348,6 +1387,8 @@ impl Sintatico {
                     return Ok(Acoes::Empilha(62));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Empilha(88));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Empilha(97));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::H) = simbolo {
                     return Ok(Acoes::VaiPara(31));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::I) = simbolo {
@@ -1409,6 +1450,8 @@ impl Sintatico {
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
                     return Ok(Acoes::Reduz(16));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(16));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
                     return Ok(Acoes::Reduz(16));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(16));
@@ -1503,6 +1546,8 @@ impl Sintatico {
                     return Ok(Acoes::Empilha(62));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Empilha(88));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Empilha(97));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::H) = simbolo {
                     return Ok(Acoes::VaiPara(40));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::I) = simbolo {
@@ -1565,6 +1610,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(17));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(17));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(17));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(17));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -1583,63 +1630,65 @@ impl Sintatico {
             },
             42 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(45));
+                    return Ok(Acoes::Reduz(46));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -1711,6 +1760,8 @@ impl Sintatico {
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
                     return Ok(Acoes::Reduz(18));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(18));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
                     return Ok(Acoes::Reduz(18));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(18));
@@ -1815,6 +1866,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(19));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(19));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(19));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(19));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -1840,63 +1893,65 @@ impl Sintatico {
             },
             53 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(23));
+                    return Ok(Acoes::Reduz(24));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -1910,63 +1965,65 @@ impl Sintatico {
             },
             55 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(24));
+                    return Ok(Acoes::Reduz(25));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -1980,63 +2037,65 @@ impl Sintatico {
             },
             57 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(25));
+                    return Ok(Acoes::Reduz(26));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2050,63 +2109,65 @@ impl Sintatico {
             },
             59 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(26));
+                    return Ok(Acoes::Reduz(27));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2120,63 +2181,65 @@ impl Sintatico {
             },
             61 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(27));
+                    return Ok(Acoes::Reduz(28));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2250,6 +2313,8 @@ impl Sintatico {
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
                     return Ok(Acoes::Reduz(20));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(20));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
                     return Ok(Acoes::Reduz(20));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(20));
@@ -2333,6 +2398,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(21));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(21));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(21));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(21));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -2360,63 +2427,65 @@ impl Sintatico {
             },
             69 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(28));
+                    return Ok(Acoes::Reduz(29));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2442,63 +2511,65 @@ impl Sintatico {
             },
             71 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(29));
+                    return Ok(Acoes::Reduz(30));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2514,63 +2585,65 @@ impl Sintatico {
             },
             73 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(30));
+                    return Ok(Acoes::Reduz(31));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2596,63 +2669,65 @@ impl Sintatico {
             },
             75 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(31));
+                    return Ok(Acoes::Reduz(32));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2668,63 +2743,65 @@ impl Sintatico {
             },
             77 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(32));
+                    return Ok(Acoes::Reduz(33));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2750,63 +2827,65 @@ impl Sintatico {
             },
             79 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(33));
+                    return Ok(Acoes::Reduz(34));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2822,63 +2901,65 @@ impl Sintatico {
             },
             81 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(34));
+                    return Ok(Acoes::Reduz(35));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2904,63 +2985,65 @@ impl Sintatico {
             },
             83 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(35));
+                    return Ok(Acoes::Reduz(36));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -2976,63 +3059,65 @@ impl Sintatico {
             },
             85 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(36));
+                    return Ok(Acoes::Reduz(28));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -3058,63 +3143,65 @@ impl Sintatico {
             },
             87 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(37));
+                    return Ok(Acoes::Reduz(38));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -3196,6 +3283,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(22));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(22));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(22));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(22));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -3223,63 +3312,65 @@ impl Sintatico {
             },
             94 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(38));
+                    return Ok(Acoes::Reduz(39));
                 } else {
                     return Ok(Acoes::Erro);
                 }
@@ -3295,68 +3386,142 @@ impl Sintatico {
             },
             96 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(39));
+                    return Ok(Acoes::Reduz(40));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             97 => {
+                if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
+                    return Ok(Acoes::Empilha(98));
+                } else {
+                    return Ok(Acoes::Erro);
+                }
+            },
+            98 => {
+                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
+                    return Ok(Acoes::Reduz(23));
+                } else {
+                    return Ok(Acoes::Erro);
+                }
+            },
+            99 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
                     return Ok(Acoes::Empilha(12));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
@@ -3371,385 +3536,397 @@ impl Sintatico {
                     return Ok(Acoes::Empilha(62));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Empilha(88));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Empilha(97));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::H) = simbolo {
-                    return Ok(Acoes::VaiPara(98));
+                    return Ok(Acoes::VaiPara(100));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::I) = simbolo {
                     return Ok(Acoes::VaiPara(10));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
-            98 => {
-                if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Empilha(99));
-                } else {
-                    return Ok(Acoes::Erro);
-                }
-            },
-            99 => {
-                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(4));
-                } else {
-                    return Ok(Acoes::Erro);
-                }
-            },
             100 => {
-                if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Empilha(105));
-                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::E) = simbolo {
-                    return Ok(Acoes::VaiPara(101));
-                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::F) = simbolo {
-                    return Ok(Acoes::VaiPara(103));
+                if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Empilha(101));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             101 => {
-                if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Empilha(102));
+                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(4));
+                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
+                    return Ok(Acoes::Reduz(4));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             102 => {
-                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(3));
-                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(3));
+                if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Empilha(107));
+                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::E) = simbolo {
+                    return Ok(Acoes::VaiPara(103));
+                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::F) = simbolo {
+                    return Ok(Acoes::VaiPara(105));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             103 => {
-                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Empilha(105));
-                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(8));
-                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::E) = simbolo {
-                    return Ok(Acoes::VaiPara(104));
-                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::F) = simbolo {
-                    return Ok(Acoes::VaiPara(103));
+                if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
+                    return Ok(Acoes::Empilha(104));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             104 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(9));
+                    return Ok(Acoes::Reduz(3));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             105 => {
-                if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Empilha(106));
+                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Empilha(107));
+                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
+                    return Ok(Acoes::Reduz(8));
+                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::E) = simbolo {
+                    return Ok(Acoes::VaiPara(106));
+                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::F) = simbolo {
+                    return Ok(Acoes::VaiPara(105));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             106 => {
-                if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Empilha(108));
-                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::G) = simbolo {
-                    return Ok(Acoes::VaiPara(107));
+                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(9));
+                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
+                    return Ok(Acoes::Reduz(9));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             107 => {
-                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
-                    return Ok(Acoes::Reduz(10));
-                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
-                    return Ok(Acoes::Reduz(10));
+                if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
+                    return Ok(Acoes::Empilha(108));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             108 => {
-                if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
-                    return Ok(Acoes::Empilha(109));
-                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
+                if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
                     return Ok(Acoes::Empilha(110));
+                } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::G) = simbolo {
+                    return Ok(Acoes::VaiPara(109));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
             109 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoMAIN) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDeCodigo(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::TipoDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::DoisPontos) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoINZ) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoWNZ) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoRUI) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Bloc) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::IdDeBloco(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Set) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Print) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Operador(_)) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::AbreParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::FechaParenteses) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else if let ElementosDaPilha::Tokens(Tokens::Fim) = simbolo {
+                    return Ok(Acoes::Reduz(10));
+                } else {
+                    return Ok(Acoes::Erro);
+                }
+            },
+            110 => {
+                if let ElementosDaPilha::Tokens(Tokens::PontoEVirgula) = simbolo {
+                    return Ok(Acoes::Empilha(111));
+                } else if let ElementosDaPilha::Tokens(Tokens::Virgula) = simbolo {
+                    return Ok(Acoes::Empilha(112));
+                } else {
+                    return Ok(Acoes::Erro);
+                }
+            },
+            111 => {
+                if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
                     return Ok(Acoes::Reduz(11));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
                     return Ok(Acoes::Reduz(11));
@@ -3795,6 +3972,8 @@ impl Sintatico {
                     return Ok(Acoes::Reduz(11));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
                     return Ok(Acoes::Reduz(11));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
+                    return Ok(Acoes::Reduz(11));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(11));
                 } else if let ElementosDaPilha::Tokens(Tokens::Caractere(_)) = simbolo {
@@ -3811,16 +3990,16 @@ impl Sintatico {
                     return Ok(Acoes::Erro);
                 }
             },
-            110 => {
+            112 => {
                 if let ElementosDaPilha::Tokens(Tokens::IdDeVariavel(_)) = simbolo {
-                    return Ok(Acoes::Empilha(108));
+                    return Ok(Acoes::Empilha(110));
                 } else if let ElementosDaPilha::NaoTerminais(NaoTerminais::G) = simbolo {
-                    return Ok(Acoes::VaiPara(111));
+                    return Ok(Acoes::VaiPara(113));
                 } else {
                     return Ok(Acoes::Erro);
                 }
             },
-            111 => {
+            113 => {
                 if let ElementosDaPilha::Tokens(Tokens::AbreBlocoDATA) = simbolo {
                     return Ok(Acoes::Reduz(12));
                 } else if let ElementosDaPilha::Tokens(Tokens::FechaBlocoDATA) = simbolo {
@@ -3866,6 +4045,8 @@ impl Sintatico {
                 } else if let ElementosDaPilha::Tokens(Tokens::String(_)) = simbolo {
                     return Ok(Acoes::Reduz(12));
                 } else if let ElementosDaPilha::Tokens(Tokens::Scan) = simbolo {
+                    return Ok(Acoes::Reduz(12));
+                } else if let ElementosDaPilha::Tokens(Tokens::Return) = simbolo {
                     return Ok(Acoes::Reduz(12));
                 } else if let ElementosDaPilha::Tokens(Tokens::Numero(_)) = simbolo {
                     return Ok(Acoes::Reduz(12));
@@ -3887,5 +4068,5 @@ impl Sintatico {
                 return Err(());
             },
         }
-   }
+    }
 }

@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 pom = "3.2.0"
 debug_print = "1.0.0"
+regex = "1.9.1"
