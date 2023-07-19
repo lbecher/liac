@@ -69,10 +69,10 @@ impl Semantico {
             }
         }
 
-        println!("{}", estado);
-        println!("{:?}", self.pilha_de_tokens);
-        println!("{:?}", self.pilha_de_parametros);
-        println!("{:?}", self.retorno_de_operador);
+        //println!("{}", estado);
+        //println!("{:?}", self.pilha_de_tokens);
+        //println!("{:?}", self.pilha_de_parametros);
+        //println!("{:?}", self.retorno_de_operador);
 
         match estado {
             1 => {
