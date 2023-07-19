@@ -553,8 +553,6 @@ impl LLVM {
         let min_max = obter_maximo_minimo(&self.bloco_basico);
         let bloco_basico: String;
 
-        println!("{:?}\n{}", min_max, self.contador_geral);
-
         if let Some((min, _)) = min_max {
             bloco_basico = substituir_com_decremento(
                 self.bloco_basico.as_str(), 

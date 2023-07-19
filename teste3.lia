@@ -1,23 +1,19 @@
 #DATA:
-    UINT32: var1, var2, resultado;
-    UINT32: soma_var1, soma_var2, soma_resultado;
+    INT32: n, res, num, menor_igual;
 #DATA;
 
-#MAIN:   
-    !--
-    qualquer modificação em var1 e var2
-    --!
-    
-    SET: soma_var1, var1;
-    SET: soma_var2, var2
-    BLOC: SOMA;
-    SET: resultado, soma_resultado;
-    
-    !--
-    qualquer modificação em resultado
-    --!
 #MAIN:
+    SET: res, 1;
+    SET: num, 2;
+    SET: n, 4;
+    BLOC: POTENCIA;
+    PRINT: "%d\n", res;
+#MAIN;
 
-#SOMA:
-    SET: soma_resultado, ADD(soma_var1, soma_var2);
-#SOMA;
+#POTENCIA:
+    #WNZ: n:
+        SET: res, MUL(num, res);
+        PRINT: "%d\n", n;
+        SET: n, SUB(n, 1);
+    #WNZ;
+#POTENCIA;

@@ -11,12 +11,11 @@
 #MAIN;
 
 #POTENCIA:
-    SET: n, SUB(n, 1);
     SET: menor_igual, BE(n, 0);
     #INZ: menor_igual:
-        PRINT: "%d\n", res;
         RETURN;
     #INZ;
     SET: res, MUL(num, res);
+    SET: n, SUB(n, 1);
     BLOC: POTENCIA;
 #POTENCIA;
