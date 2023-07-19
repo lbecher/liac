@@ -1,23 +1,26 @@
 #DATA:
-    INT32: x, y, resultado;
-#DATA
+    INT32: a, b;
+    INT64: c, d;
+    INT16: e, f;
+    INT8: g, h;
+    UINT32: a_, b_;
+    UINT64: c_, d_;
+    UINT16: e_, f_;
+    UINT8: g_, h_;
+#DATA;
 
 #MAIN:
-    // resultado = resultado + 2;
-    SET: resultado, ADD(resultado, 2);
-    
-    // resultado = resultado + (x + (resultado * 2));
-    SET: resultado, ADD(resultado, ADD(x, MUL(resultado, 2)));
-    
-    BLOC: OPLOGICA;
+    SET: a, ADD(a, NOT(b));
+    SET: c, ADD(c, NOT(d));
+    SET: e, f;
+    SET: g, h;
+    SET: a_, ADD(a, NOT(b));
+    SET: c_, -1;
+    SET: e_, f_;
+    SET: g_, 111111;
+    PRINT: "%d %d %ld %ld\n", a, b, c, d;
 #MAIN;
 
-#OPLOGICA:
-    SET: x, 1;
-    SET: y, 0;
-    
-    // if (x > y && resultado < y);
-    #INZ: AND(A(x, y), B(resultado, y)):
-        PRINT: "ola";
-    #INZ;
-#OPLOGICA;
+#HELLO:
+    PRINT: "Hi\n";
+#HELLO;

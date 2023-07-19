@@ -76,9 +76,11 @@ impl Semantico {
 
         match estado {
             1 => {
+                //println!("{:?}", self.blocos_de_codigos);
                 return self.verificar_declaracao_de_blocos();
             }
             2 => {
+                //println!("{:?}", self.blocos_de_codigos);
                 return self.verificar_declaracao_de_blocos();
             }
             4 => {
@@ -231,7 +233,7 @@ impl Semantico {
     fn verificar_declaracao_de_blocos(&mut self) -> Result<(), String> {
         for (bloco, declarado) in self.blocos_de_codigos.clone() {
             if !declarado {
-                return Err(format!("ERRO SEMÂNTICO: O bloco '{}' não declarado!", bloco));
+                return Err(format!("ERRO SEMÂNTICO: Bloco '{}' não declarado!", bloco));
             }
         }
 
@@ -369,6 +371,23 @@ impl Semantico {
                         }
                         Err(erro) => return Err(erro),
                     }
+                } else if parametro.tipo_de_parametro.clone() == TipoDeParametroLLVM::VariavelGlobal {
+                    if parametro.tipo_de_dado.clone() != var_de_destino.tipo_de_dado.clone() {
+                        return Err(format!(
+                            "ERRO SEMÂNTICO: A variável {} não é compatível com {:?}!",
+                            parametro.parametro,
+                            var_de_destino.tipo_de_dado.clone(),
+                        ));
+                    }
+                } else if parametro.tipo_de_parametro.clone() == TipoDeParametroLLVM::VariavelTemporaria {
+                    if parametro.tipo_de_dado.clone() != var_de_destino.tipo_de_dado.clone() {
+                        return Err(format!(
+                            "ERRO SEMÂNTICO: O operador no segundo parâmetro não é compatível com {:?}!",
+                            var_de_destino.tipo_de_dado.clone(),
+                        ));
+                    }
+                } else {
+                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::modificar_variavel()!"));
                 }
 
                 parametro
@@ -448,7 +467,7 @@ impl Semantico {
     fn gerar_chamada_de_bloco(&mut self) -> Result<(), String> {
         if let Some(Tokens::IdDeBloco(bloco)) = self.pilha_de_tokens.pop() {
             if self.blocos_de_codigos.get(bloco.as_str()).is_none() {
-                self.blocos_de_codigos.insert(bloco.to_string(), true);
+                self.blocos_de_codigos.insert(bloco.to_string(), false);
             }
 
             self.llvm.gerar_chamada_de_bloco(ParametroLLVM::instanciar(
@@ -459,7 +478,7 @@ impl Semantico {
             
             return Ok(());
         } else {
-            return Err(String::from("ERRO NO COMPILADOR: Sei lá!"));
+            return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_chamada_de_bloco()!"));
         }
     }
 
@@ -823,16 +842,26 @@ impl Semantico {
 
                         let retorno = self.llvm.gerar_operacao(operando1, operador, Some(operando2));
                         self.retorno_de_operador = Some(retorno);
+                    } else if operando2.tipo_de_parametro.clone() == TipoDeParametroLLVM::VariavelTemporaria {
+                        if operando2.tipo_de_dado.clone() != operando1.tipo_de_dado.clone() {
+                            return Err(format!(
+                                "ERRO SEMÂNTICO: O operador no segundo parâmetro não é compatível com {:?}!",
+                                operando1.tipo_de_dado.clone(),
+                            ));
+                        }
+
+                        let retorno = self.llvm.gerar_operacao(operando1, operador, Some(operando2));
+                        self.retorno_de_operador = Some(retorno);
                     } else {
-                        return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao()!"));
+                        return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao().3!"));
                     }
                 } else {
-                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao()!"));
+                    return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao().2!"));
                 }
             }
             return Ok(());
         } else {
-            return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao()!"));
+            return Err(String::from("ERRO NO COMPILADOR: Inconsistência em Semantico::gerar_operacao().1!"));
         }
     }
 
