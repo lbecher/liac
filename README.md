@@ -16,7 +16,7 @@ Ou, para executar em modo debug, execute o comando:
 cargo run -- /caminho/para/o/arquivo/de/entrada.lia
 ```
 
-## Execução (compilador e compilação de uma programa LIA)
+## Execução (compilador e programa LIA)
 
 Observação: requer `llvm` e `clang` instalados na máquina.
 
@@ -24,6 +24,12 @@ Após acessar a raiz do projeto, execute o comando:
 
 ```
 ./run.sh /caminho/para/o/arquivo/de/entrada.lia
+```
+
+Um binário será produzido. Para executá-lo, basta usar o comando:
+
+```
+./main
 ```
 
 ## Sobre os testes disponibilizados
