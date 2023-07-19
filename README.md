@@ -2,7 +2,7 @@
 
 Compilador para a linguagem LIA. Projeto da disciplina de Compiladores do Curso de Ciência da Computação.
 
-## Execução
+## Execução (somente do compilador)
 
 Após acessar a raiz do projeto, execute o comando:
 
@@ -14,6 +14,16 @@ Ou, para executar em modo debug, execute o comando:
 
 ```
 cargo run -- /caminho/para/o/arquivo/de/entrada.lia
+```
+
+## Execução (compilador e compilação de uma programa LIA)
+
+Observação: requer `llvm` e `clang` instalados na máquina.
+
+Após acessar a raiz do projeto, execute o comando:
+
+```
+./run.sh /caminho/para/o/arquivo/de/entrada.lia
 ```
 
 ## Sobre os testes disponibilizados
