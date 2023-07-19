@@ -137,7 +137,7 @@ pub fn obter_maximo_minimo(texto: &str) -> Option<(usize, usize)> {
     }
 
     // Retorna o resultado como uma tupla opcional
-    maximo.and_then(|max| minimo.map(|min| (max, min)))
+    maximo.and_then(|max| minimo.map(|min| (min, max)))
 }
 
 pub fn substituir_com_incremento(texto: &str, incremento: usize) -> String {
@@ -155,7 +155,7 @@ pub fn substituir_com_incremento(texto: &str, incremento: usize) -> String {
             // Se for do tipo <numero>:
             let numero_antigo = numero.as_str().parse::<usize>().unwrap();
             let novo_numero = numero_antigo.wrapping_add(incremento); // Usamos wrapping_add para evitar estouro numérico.
-            format!("{}", novo_numero)
+            format!("{}:", novo_numero)
         } else {
             // Se não for um padrão conhecido, retorna o próprio texto.
             caps.get(0).unwrap().as_str().to_string()
@@ -180,7 +180,7 @@ pub fn substituir_com_decremento(texto: &str, decremento: usize) -> String {
             // Se for do tipo <numero>:
             let numero_antigo = numero.as_str().parse::<usize>().unwrap();
             let novo_numero = numero_antigo.wrapping_sub(decremento); // Usamos wrapping_sub para evitar estouro numérico.
-            format!("{}", novo_numero)
+            format!("{}:", novo_numero)
         } else {
             // Se não for um padrão conhecido, retorna o próprio texto.
             caps.get(0).unwrap().as_str().to_string()

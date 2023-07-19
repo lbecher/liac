@@ -1,12 +1,22 @@
 #DATA:
-    INT32: x, y, resultado;
+    INT32: n, res, num, menor_igual;
 #DATA;
 
 #MAIN:
-    BLOC: SOMA;
+    SET: res, 1;
+    SET: num, 2;
+    SET: n, 4;
+    BLOC: POTENCIA;
+    PRINT: "%d\n", res;
 #MAIN;
 
-#SOMA:
-    SET: resultado, 0;
-    SET: resultado, ADD(x, y);
-#SOMA;
+#POTENCIA:
+    SET: n, SUB(n, 1);
+    SET: menor_igual, BE(n, 0);
+    #INZ: menor_igual:
+        PRINT: "%d\n", res;
+        RETURN;
+    #INZ;
+    SET: res, MUL(num, res);
+    BLOC: POTENCIA;
+#POTENCIA;

@@ -16,4 +16,9 @@
 #FAZER_SCAN:
     PRINT: "Digite tres nemeros: ";
     SCAN: "%d %d %d", x, y, z;
+    #INZ: x:
+        #INZ: y:
+            PRINT: "Vish";
+        #INZ;
+    #INZ;
 #FAZER_SCAN;

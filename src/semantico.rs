@@ -11,6 +11,7 @@ pub struct Semantico {
     blocos_de_codigos: HashMap<String, bool>,
     pilha_de_tokens: Vec<Tokens>,
     pilha_de_parametros: Vec<ParametroLLVM>,
+    pilha_de_parametros_condicionais: Vec<ParametroLLVM>,
     retorno_de_operador: Option<ParametroLLVM>,
     llvm: LLVM,
     pilha_de_blocos: Vec<Tokens>,
@@ -23,6 +24,7 @@ impl Semantico {
             blocos_de_codigos: HashMap::new(),
             pilha_de_tokens: Vec::new(),
             pilha_de_parametros: Vec::new(),
+            pilha_de_parametros_condicionais: Vec::new(),
             retorno_de_operador: None,
             llvm: LLVM::inicializar(),
             pilha_de_blocos: Vec::new(),
@@ -66,6 +68,11 @@ impl Semantico {
                 }
             }
         }
+
+        println!("{}", estado);
+        println!("{:?}", self.pilha_de_tokens);
+        println!("{:?}", self.pilha_de_parametros);
+        println!("{:?}", self.retorno_de_operador);
 
         match estado {
             1 => {
@@ -421,7 +428,7 @@ impl Semantico {
     }
 
     fn gerar_inz(&mut self) -> Result<(), String> {
-        if let Some(parametro) = self.pilha_de_parametros.pop() {
+        if let Some(parametro) = self.pilha_de_parametros_condicionais.pop() {
             self.llvm.gerar_inz(parametro);
             return Ok(());
         } else {
@@ -430,7 +437,7 @@ impl Semantico {
     }
 
     fn gerar_wnz(&mut self) -> Result<(), String> {
-        if let Some(parametro) = self.pilha_de_parametros.pop() {
+        if let Some(parametro) = self.pilha_de_parametros_condicionais.pop() {
             self.llvm.gerar_wnz(parametro);
             return Ok(());
         } else {
@@ -491,7 +498,7 @@ impl Semantico {
             }
         };
 
-        self.pilha_de_parametros.push(parametro);
+        self.pilha_de_parametros_condicionais.push(parametro);
 
         Ok(())
     }

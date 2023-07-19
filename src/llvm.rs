@@ -56,15 +56,15 @@ impl LLVM {
         codigo_llvm += "\ndefine dso_local i32 @main() #0 {\n";
         codigo_llvm += self.bloco_de_funcao.as_str();
 
-        if codigo_llvm.contains("$$$$") {
-            codigo_llvm += "  br label %$$$$\n\n$$$$:\n";
+        if codigo_llvm.contains("&&&&") {
+            codigo_llvm += "  br label %&&&&\n\n&&&&:\n";
         }
 
         codigo_llvm += "  ret i32 0\n";
         codigo_llvm += "}\n";
 
         codigo_llvm = codigo_llvm.replace(
-            "$$$$",
+            "&&&&",
             format!("{}", self.contador_geral).as_str()
         );
 
@@ -81,16 +81,20 @@ impl LLVM {
         codigo_llvm += "() #0 {\n";
         codigo_llvm += self.bloco_de_funcao.as_str();
 
-        if codigo_llvm.contains("$$$$") {
-            codigo_llvm += "  br label %$$$$\n\n$$$$:\n";
+        if codigo_llvm.contains("&&&&") {
+            codigo_llvm += "  br label %&&&&\n\n&&&&:\n";
         }
 
         codigo_llvm += "  ret void\n";
         codigo_llvm += "}\n";
 
+        let label_um = self.criar_var_temporaria(TipoDeDado::Undefined).parametro.to_string();
+        let label_um_numero = label_um.to_string();
+        let (_, label_um_numero) = label_um_numero.split_at(1);
+
         codigo_llvm = codigo_llvm.replace(
-            "$$$$",
-            format!("{}", self.contador_geral).as_str()
+            "&&&&",
+            format!("{}", label_um_numero).as_str()
         );
 
         self.codigo_llvm += codigo_llvm.as_str();
@@ -443,13 +447,16 @@ impl LLVM {
     }
 
     pub fn gerar_retorno(&mut self) {
-        self.bloco_basico = format!(
-            "{0}  br label %$$$$\n\n{1}:\n",
-            self.bloco_basico,
-            self.contador_geral,
-        );
+        let label_um = self.criar_var_temporaria(TipoDeDado::Undefined).parametro.to_string();
+        let label_um_numero = label_um.to_string();
+        let (_, label_um_numero) = label_um_numero.split_at(1);
 
-        self.incrementar_contador_geral();
+        self.bloco_basico = format!(
+            "{0}  br i1 0, label {1}, label %&&&&\n\n{2}:\n",
+            self.bloco_basico,
+            label_um,
+            label_um_numero,
+        );
     }
 
     
@@ -546,6 +553,8 @@ impl LLVM {
         let min_max = obter_maximo_minimo(&self.bloco_basico);
         let bloco_basico: String;
 
+        println!("{:?}\n{}", min_max, self.contador_geral);
+
         if let Some((min, _)) = min_max {
             bloco_basico = substituir_com_decremento(
                 self.bloco_basico.as_str(), 
@@ -613,60 +622,6 @@ impl LLVM {
             "$$$$",
             format!("{}", label_dois_numero).as_str()
         );
-
-        /*let mut incremento: usize = 1;
-        let bloco_basico = self.bloco_basico.to_string();
-        self.bloco_basico = String::new();
-
-        let inicio = self.contador_geral;
-
-        let comparacao: ParametroLLVM;
-
-        if parametro.tipo_de_parametro.clone() == TipoDeParametroLLVM::VariavelGlobal {
-            comparacao = self.ler_variavel_global(parametro);
-            incremento += 1;
-        } else {
-            comparacao = parametro;
-        }
-
-        let zero = ParametroLLVM::instanciar(
-            "0",
-            TipoDeParametroLLVM::Numero,
-            comparacao.tipo_de_dado.clone(),
-        );
-
-        let var_de_destino = self.criar_var_temporaria(comparacao.tipo_de_dado.clone());
-
-        let comando = ComandoLLVM {
-            comando: Comandos::Diferente,
-            destino: Some(var_de_destino),
-            parametros: vec![
-                comparacao,
-                zero,
-            ],
-        };
-        self.gerar_comando_llvm(comando);
-
-        /*let (bloco_basico, deslocamento) = substituir_com_incremento(
-            bloco_basico.as_str(),
-            incremento,
-        );*/
-
-        self.bloco_basico += format!(
-            "  br i1 %{0}, label %{1}, label %$$$$\n\n{1}:\n{2}  br label %$$$$\n\n$$$$:\n",
-            self.contador_geral - 1,
-            self.contador_geral,
-            bloco_basico,
-        ).as_str();
-
-        //self.contador_geral += deslocamento + 1;
-
-        self.bloco_basico = self.bloco_basico.replace(
-            "$$$$",
-            format!("{}", self.contador_geral).as_str()
-        );
-
-        //self.incrementar_contador_geral();*/
     }
 
     pub fn gerar_print(
